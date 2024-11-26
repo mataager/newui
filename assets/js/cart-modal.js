@@ -149,16 +149,15 @@ function openCartModal(productId) {
         </div>
         
       
-        <h3 class="m-5 flex center align-items">Size: <p id="product-Size"></p></h3>
-        <div id="size-hint-text" style="display: none; font-size: 16px; color: #333; margin-top: 10px;"></div>
+        <div class="size m-5"><h3 class="m-5 flex pb-7 center align-items">Size: <p id="product-Size"></p></h3><div id="size-hint-text" style="display: none; font-size: 16px; color: #333; margin-top: 10px;"></div></div>
         <ul class="m-5 flex">${Object.keys(product.sizes)
           .map(
             (size) =>
               `<div class="size-radio m-5" onclick="SizeRef('${size}')"><label class="radio-input_option"><span class="size-value">${size}</span></label></div>`
           )
           .join("")}</ul>
-        <h3 class="m-5 flex">Color: <p id="product-color"></p></h3>
-        <div id="color-hint-text" style="display: none; font-size: 16px; color: #333; margin-top: 10px;"></div>
+        <div class="size m-5"><h3 class="m-5 flex pb-7 center align-items">Color: <p id="product-color"></p></h3><div id="color-hint-text" style="display: none; font-size: 16px; color: #333; margin-top: 10px;"></div></div>
+        
         <ul id="product-colors" class="m-5 flex flex-wrap hidden"></ul>
         <div class="m-5 flex align-items">
          SKU :<p id="productID">${productId}</p> 
@@ -258,48 +257,6 @@ function SizeRef(size) {
 }
 
 // function updateAddToCartButtonState() {
-//   const color = document.getElementById("product-color").innerText.trim(); // Get the selected color
-//   const addToCartButton = document.getElementById("addToCartButton");
-//   const colorhintTextElement = document.getElementById("color-hint-text");
-//   const sizehintTextElement = document.getElementById("color-hint-text");
-
-//   if (color) {
-//     // Enable the "Add to Cart" button when a color is selected
-//     addToCartButton.disabled = false;
-//     addToCartButton.style.opacity = 1;
-//     addToCartButton.innerHTML = 'Add to Cart <i class="bi bi-bag-check"></i>';
-//     addToCartButton.onclick = addToCart;
-
-//     // Hide the hint text
-//     if (colorhintTextElement) {
-//       colorhintTextElement.style.display = "none";
-//       colorhintTextElement.classList.remove("rolling-animation");
-//       colorhintTextElement.innerHTML = ""; // Clear any dynamically added underline
-//     }
-//   } else {
-//     // Disable the "Add to Cart" button if no color is selected
-//     addToCartButton.disabled = true;
-//     addToCartButton.style.opacity = 0.5;
-//     addToCartButton.innerHTML =
-//       'Add to Cart <i class="bi bi-exclamation-lg"></i>';
-//     addToCartButton.onclick = null;
-
-//     if (colorhintTextElement) {
-//       // Set the full hint text immediately
-//       colorhintTextElement.innerText = "Must choose a color!";
-
-//       // Make the text visible and add animation class
-//       colorhintTextElement.style.display = "block";
-//       colorhintTextElement.classList.add("rolling-animation");
-
-//       // Add the underline element dynamically
-//       const underlineElement = document.createElement("div");
-//       underlineElement.classList.add("underline-animation");
-//       colorhintTextElement.appendChild(underlineElement);
-//     }
-//   }
-// }
-// function updateAddToCartButtonState() {
 //   const size = document.getElementById("product-Size").innerText.trim(); // Get the selected size
 //   const color = document.getElementById("product-color").innerText.trim(); // Get the selected color
 //   const addToCartButton = document.getElementById("addToCartButton");
@@ -315,7 +272,9 @@ function SizeRef(size) {
 
 //       const underlineElement = document.createElement("div");
 //       underlineElement.classList.add("underline-animation");
-//       sizeHintTextElement.appendChild(underlineElement);
+//       if (!sizeHintTextElement.querySelector(".underline-animation")) {
+//         sizeHintTextElement.appendChild(underlineElement);
+//       }
 //     }
 
 //     // Disable "Add to Cart" button until size is selected
@@ -343,7 +302,9 @@ function SizeRef(size) {
 
 //       const underlineElement = document.createElement("div");
 //       underlineElement.classList.add("underline-animation");
-//       colorHintTextElement.appendChild(underlineElement);
+//       if (!colorHintTextElement.querySelector(".underline-animation")) {
+//         colorHintTextElement.appendChild(underlineElement);
+//       }
 //     }
 
 //     // Disable "Add to Cart" button until color is selected
@@ -375,64 +336,56 @@ function updateAddToCartButtonState() {
   const sizeHintTextElement = document.getElementById("size-hint-text");
   const colorHintTextElement = document.getElementById("color-hint-text");
 
+  // Handle size hint
   if (!size) {
-    // Show the size hint if no size is selected
     if (sizeHintTextElement) {
       sizeHintTextElement.innerText = "Must choose a size!";
       sizeHintTextElement.style.display = "block";
       sizeHintTextElement.classList.add("rolling-animation");
 
-      const underlineElement = document.createElement("div");
-      underlineElement.classList.add("underline-animation");
-      if (!sizeHintTextElement.querySelector(".underline-animation")) {
-        sizeHintTextElement.appendChild(underlineElement);
-      }
+      // Add underline animation
     }
 
-    // Disable "Add to Cart" button until size is selected
+    // Disable "Add to Cart" button
     addToCartButton.disabled = true;
     addToCartButton.style.opacity = 0.5;
     addToCartButton.innerHTML =
       'Add to Cart <i class="bi bi-exclamation-lg"></i>';
     addToCartButton.onclick = null;
-    return; // Stop further execution until size is selected
+    return;
   }
 
   // Hide size hint if size is selected
   if (sizeHintTextElement) {
     sizeHintTextElement.style.display = "none";
     sizeHintTextElement.classList.remove("rolling-animation");
-    sizeHintTextElement.innerHTML = ""; // Clear any dynamically added underline
+    sizeHintTextElement.innerHTML = ""; // Clear dynamically added underline
   }
 
+  // Handle color hint
   if (!color) {
-    // Show the color hint if no color is selected
     if (colorHintTextElement) {
       colorHintTextElement.innerText = "Must choose a color!";
       colorHintTextElement.style.display = "block";
       colorHintTextElement.classList.add("rolling-animation");
 
-      const underlineElement = document.createElement("div");
-      underlineElement.classList.add("underline-animation");
-      if (!colorHintTextElement.querySelector(".underline-animation")) {
-        colorHintTextElement.appendChild(underlineElement);
-      }
+      // Add underline animation
     }
 
-    // Disable "Add to Cart" button until color is selected
+    // Disable "Add to Cart" button
     addToCartButton.disabled = true;
     addToCartButton.style.opacity = 0.5;
     addToCartButton.innerHTML =
       'Add to Cart <i class="bi bi-exclamation-lg"></i>';
     addToCartButton.onclick = null;
-    return; // Stop further execution until color is selected
+    return;
   }
 
   // Hide color hint if color is selected
   if (colorHintTextElement) {
     colorHintTextElement.style.display = "none";
     colorHintTextElement.classList.remove("rolling-animation");
-    colorHintTextElement.innerHTML = ""; // Clear any dynamically added underline
+    colorHintTextElement.innerHTML = ""; // Clear dynamically added underline
   }
 
   // Enable "Add to Cart" button when both size and color are selected

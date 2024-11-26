@@ -1895,6 +1895,10 @@ a.footer-link:is(:hover, :focus) {
   padding: 10px !important;
 }
 
+.pb-7 {
+  padding-bottom: 7px;
+}
+
 .center {
   justify-content: center;
 }
@@ -3616,11 +3620,22 @@ a {
 }
 
 /* Title styling */
-.section-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-align: center;
+.related-section-title {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  /* Space between the text and the line */
+  white-space: nowrap;
+  /* Prevent text wrapping */
 }
+
+.related-line {
+  flex-grow: 1;
+  /* Make the line take up the remaining space */
+  height: 3px;
+  background-color: var(--gainsboro);
+}
+
 
 /* Container for the product cards */
 .product-cards-container {
@@ -3723,4 +3738,54 @@ a {
 
 .dots-container span.active {
   background-color: #000000;
+}
+
+/* Hint text container styling */
+.rolling-container {
+  position: relative;
+  font-size: 16px;
+  color: rgb(51, 51, 51);
+  margin-top: 10px;
+  overflow: hidden;
+  height: 20px;
+  /* Restrict visible height for the animation */
+  line-height: 20px;
+}
+
+.rolling-animation {
+  animation: roll-down 2s infinite;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+/* Overlay effect to hide the hint text */
+.rolling-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  /* Matches the background to create a "hidden" effect */
+  z-index: 1;
+}
+
+/* Reverse rolling animation */
+/* Rolling down animation */
+/* Keyframes for rolling down */
+@keyframes roll-down {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

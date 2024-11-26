@@ -24,6 +24,7 @@
     <script src="./assets/js/static.js"></script>
     <script src="./assets/js/search-product.js"></script>
     <script src="./assets/js/image-error.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 
@@ -222,18 +223,19 @@
                                 <p id="productPrice" class="m-5 mb-10"></p>
 
                                 <div class="size m-5 mb-10">
-                                    <label class="m-5 flex" for="product-Size">
+                                    <label class="m-5 flex pb-7" for="product-Size">
                                         Size:<p id="product-Size"> </p>
                                     </label>
-                                    <div id="size-hint-text"
-                                        style="display: none; font-size: 16px; color: #333; margin-top: 10px;">
+                                    <div class="rolling-container rolling-animation" id="size-hint-text">
+
                                     </div>
+
                                     <div role="radiogroup" class="radio-group size-tabs mb-10">
                                     </div>
                                 </div>
 
                                 <div class="color-selector m-5 mb-10">
-                                    <label class="m-5 flex align-items" for="product-color">Color:<p id="product-color">
+                                    <label class="m-5 flex align-items pb-7" for="product-color">Color:<p id="product-color">
                                         <div id="hint" class="hint-text"></div>
                                         </p>
                                     </label>
@@ -380,7 +382,10 @@
 
         <section>
             <div class="related-products-section" id="related-products-section">
-                <h3 class="section-title mb-20">Related Products</h3>
+                <h2 class="flex align-items m-x-20 related-section-title">
+                    <span class="text">Related Products</span>
+                    <span class="related-line"></span>
+                </h2>
 
                 <div class="related-product-cards-container">
                     <button id="scroll-left" class="scroll-btn">
@@ -901,21 +906,62 @@
             const hintTextElement = document.getElementById('color-hint-text');
             if (hintTextElement) {
                 // Set the full hint text immediately
-                hintTextElement.innerText = 'Must choose a color!';
+                hintTextElement.innerHTML = 'Must choose a color <i class="bi bi-arrow-down"></i>';
 
                 // Make the text visible and add animation class
                 hintTextElement.style.display = 'block';
                 hintTextElement.classList.add('rolling-animation');
 
-                // Add the underline element dynamically
-                const underlineElement = document.createElement('div');
-                underlineElement.classList.add('underline-animation');
-                hintTextElement.appendChild(underlineElement);
             }
             checkSizeSelection();
         }
 
         // Function for color selection
+        // function checkSizeSelection() {
+        //     const selectedSize = document.querySelector('.size-radio[style*="background-color: rgb(51, 51, 51)"]');
+        //     const sizeHintTextElement = document.getElementById('size-hint-text');
+
+        //     if (!selectedSize) {
+        //         // Show size hint if no size is selected
+        //         if (sizeHintTextElement) {
+        //             sizeHintTextElement.innerHTML = 'Must choose a size <i class="bi bi-arrow-down"></i>';
+        //             sizeHintTextElement.style.display = 'block';
+        //             sizeHintTextElement.classList.add('rolling-animation');
+
+        //             // Add the underline element dynamically if not already present
+        //             if (!sizeHintTextElement.querySelector('.underline-animation')) {
+        //                 const underlineElement = document.createElement('div');
+        //                 underlineElement.classList.add('underline-animation');
+        //                 sizeHintTextElement.appendChild(underlineElement);
+        //             }
+        //         }
+        //     } else {
+        //         // Hide size hint if a size is selected
+        //         if (sizeHintTextElement) {
+        //             sizeHintTextElement.style.display = 'none';
+        //             sizeHintTextElement.innerText = ''; // Clear the hint text
+        //         }
+        //     }
+        // }
+
+        // function ColorRef(selectedElement) {
+        //     // Get all the color-option elements
+        //     const colorElements = document.querySelectorAll('.color-option');
+
+        //     // Loop through each color and reset the border
+        //     colorElements.forEach(function (element) {
+        //         element.style.border = ''; // Reset the border
+        //     });
+
+        //     // Set the border of the clicked color to 5px solid #c1c1c1
+        //     selectedElement.style.borderBottom = '5px solid #c1c1c1';
+
+        //     // Hide the hint text once a color is selected
+        //     const hintTextElement = document.getElementById('color-hint-text');
+        //     if (hintTextElement) {
+        //         hintTextElement.style.display = 'none'; // Hide the hint text
+        //     }
+        // }
         function checkSizeSelection() {
             const selectedSize = document.querySelector('.size-radio[style*="background-color: rgb(51, 51, 51)"]');
             const sizeHintTextElement = document.getElementById('size-hint-text');
@@ -923,22 +969,16 @@
             if (!selectedSize) {
                 // Show size hint if no size is selected
                 if (sizeHintTextElement) {
-                    sizeHintTextElement.innerText = 'Must choose a size!';
+                    sizeHintTextElement.innerHTML = 'Must choose a size <i class="bi bi-arrow-down"></i>';
                     sizeHintTextElement.style.display = 'block';
                     sizeHintTextElement.classList.add('rolling-animation');
-
-                    // Add the underline element dynamically if not already present
-                    if (!sizeHintTextElement.querySelector('.underline-animation')) {
-                        const underlineElement = document.createElement('div');
-                        underlineElement.classList.add('underline-animation');
-                        sizeHintTextElement.appendChild(underlineElement);
-                    }
                 }
             } else {
                 // Hide size hint if a size is selected
                 if (sizeHintTextElement) {
                     sizeHintTextElement.style.display = 'none';
                     sizeHintTextElement.innerText = ''; // Clear the hint text
+                    sizeHintTextElement.classList.remove('rolling-animation');
                 }
             }
         }
@@ -955,10 +995,22 @@
             // Set the border of the clicked color to 5px solid #c1c1c1
             selectedElement.style.borderBottom = '5px solid #c1c1c1';
 
-            // Hide the hint text once a color is selected
+            // Show or hide the color hint text
             const hintTextElement = document.getElementById('color-hint-text');
             if (hintTextElement) {
-                hintTextElement.style.display = 'none'; // Hide the hint text
+                hintTextElement.style.display = 'none'; // Hide the hint text once a color is selected
+                hintTextElement.innerText = ''; // Clear the hint text
+                hintTextElement.classList.remove('rolling-animation');
+            }
+        }
+
+        // Call this function when the user needs a hint for color selection
+        function showColorHint() {
+            const hintTextElement = document.getElementById('color-hint-text');
+            if (hintTextElement) {
+                hintTextElement.innerHTML = 'Please select a color <i class="bi bi-arrow-down"></i>';
+                hintTextElement.style.display = 'block';
+                hintTextElement.classList.add('rolling-animation');
             }
         }
 
@@ -1060,7 +1112,7 @@
 
         // Initialize the product display and dots on page load
         navigateToPage(currentPage);
-        
+
     });
 </script>
 <script src="./assets/js/update-cart-amont.js"></script>
