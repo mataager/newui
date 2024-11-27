@@ -97,7 +97,7 @@ function openCartModal(productId) {
       setDefaultImageSource(product);
       modalContent.innerHTML = `
       <div class="flex flex-end width-available">
-      <div class="flex center flex-end " onclick="productDetails('-O94SXLc1ACNeyctZW2j')">
+      <div class="flex center flex-end " onclick="productDetails('${productId}')">
         <button type="button" class="Add-to-Cart" id="perv4Button">
             Go to product <i class="bi bi-box-arrow-in-down-right"></i>
         </button>
@@ -160,7 +160,7 @@ function openCartModal(productId) {
         
         <ul id="product-colors" class="m-5 flex flex-wrap hidden"></ul>
         <div class="m-5 flex align-items">
-         SKU :<p id="productID">${productId}</p> 
+         SKU:<p id="productID"> ${productId}</p> 
         </div>
         <div class="m-5">
           <button id="addToCartButton" onclick="addToCart()" class="Add-to-Cart" disabled style="opacity: 0.5;">Add to Cart <i class="bi bi-exclamation-lg"></i></button>

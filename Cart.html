@@ -252,6 +252,7 @@
                                     let totalAmount = 0;
 
                                     // Function to check availability from Firebase database
+
                                     function checkAvailability(itemId, productSize, productColor, requestedQuantity, callback) {
                                         // Fetch the product data from Firebase database
                                         fetch(`${url}/Stores/${uid}/Products/${itemId}.json`)
@@ -267,6 +268,7 @@
                                                         if (sizeData[productColor]) {
                                                             const colorData = sizeData[productColor];
                                                             availableQty = parseInt(colorData.qty, 10); // Get the available quantity
+                                                            const colorImage = colorData.img1 || productsData["product-photo"]; // Use color image or fallback to main product photo
 
                                                             itemFound = true;
 
@@ -277,17 +279,14 @@
                                                                 // Insufficient stock, update to the available quantity in local storage
                                                                 Swal.fire({
                                                                     icon: "warning",
-                                                                    // title: "Quantity Adjusted",
-                                                                    html: `<div style="display: flex; align-items: center; gap: 10px;"><img src="${productsData["product-photo"]}" alt="${productsData["product-title"]}" 
-style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;" 
-        />
-        <span>Only ${availableQty} items available for ${productsData["product-title"]} (${productSize}, ${productColor})</span>
-      </div>
-    `,
+                                                                    html: `<div style="display: flex; align-items: center; gap: 10px;">
+                                        <img src="${colorImage}" alt="${productsData["product-title"]}" 
+                                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;" />
+                                        <span>Only ${availableQty} items available for ${productsData["product-title"]} (${productSize}, ${productColor})</span>
+                                      </div>`,
                                                                 }).then(() => {
                                                                     // Update the cart locally to the available quantity
                                                                     updateLocalDbItemQuantity(itemId, availableQty);
-
                                                                 });
 
                                                                 callback(false, availableQty); // Insufficient stock, update local DB
@@ -363,6 +362,7 @@ style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;"
                                                 location.reload(); // Reload to reflect changes
                                             }
                                         });
+
                                     }
 
                                     // Function to update item quantity in local storage
@@ -432,27 +432,26 @@ style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;"
                                                                         `;
                                             itemDetailsDiv.appendChild(textDiv);
 
-                                            // Controls
+                                            // Controls Div to hold Increment, Decrement, and Delete buttons
                                             const controlsDiv = document.createElement("div");
-                                            controlsDiv.classList.add("flex", "center");
+                                            controlsDiv.style.display = "flex";
+                                            controlsDiv.style.gap = "10px"; // Add spacing between buttons
+                                            controlsDiv.style.alignItems = "center"; // Align buttons vertically
+                                            controlsDiv.style.justifyContent = "center"; // Center the buttons in the div
 
-                                            // Increment/Decrement icons
+                                            // Increment Button
                                             const incrementBtn = document.createElement("i");
                                             incrementBtn.className = "bi-plus-circle i-cart";
                                             incrementBtn.style.cursor = "pointer";
                                             incrementBtn.onclick = () => updateQuantity(index, 1); // Increment quantity
 
+                                            // Decrement Button
                                             const decrementBtn = document.createElement("i");
                                             decrementBtn.className = "bi-dash-circle i-cart";
                                             decrementBtn.style.cursor = "pointer";
                                             decrementBtn.onclick = () => updateQuantity(index, -1); // Decrement quantity
 
-                                            controlsDiv.appendChild(decrementBtn);
-                                            controlsDiv.appendChild(incrementBtn);
-
-                                            itemDetailsDiv.appendChild(controlsDiv);
-
-                                            // Delete
+                                            // Delete Button
                                             const deleteIcon = document.createElement("i");
                                             deleteIcon.className = "bi-bag-dash i-cart";
                                             deleteIcon.style.cursor = "pointer";
@@ -464,11 +463,20 @@ style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;"
                                                 window.location.reload();
                                             };
 
-                                            listItem.appendChild(itemDetailsDiv);
-                                            listItem.appendChild(deleteIcon);
+                                            // Append all buttons to controlsDiv
+                                            controlsDiv.appendChild(decrementBtn);
+                                            controlsDiv.appendChild(incrementBtn);
+                                            controlsDiv.appendChild(deleteIcon);
 
-                                            // Append to cart list
+                                            // Append controlsDiv to itemDetailsDiv
+                                            itemDetailsDiv.appendChild(controlsDiv);
+
+                                            // Append itemDetailsDiv to listItem
+                                            listItem.appendChild(itemDetailsDiv);
+
+                                            // Append listItem to cart list
                                             cartList.appendChild(listItem);
+
                                         });
 
                                         // Total Amount

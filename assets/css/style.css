@@ -609,6 +609,7 @@ body {
 
 .cart-amount {
   font-weight: 500 !important;
+  font-size: small;
 }
 
 .nav-action-badge {
@@ -2299,11 +2300,19 @@ select {
 }
 
 .i-cart {
+  font-size: small;
+  border-radius: 20%;
+  border: 0.5px solid #f2f2f2;
+  padding: 5px;
   margin-left: 25px !important;
+  background: black;
+  color: white;
 }
 
 .i-cart:hover {
-  color: #fc0000;
+  background: #f2f2f2;
+  color: black;
+  border: 0.5px solid #000000;
 }
 
 .img-payment {
@@ -3273,7 +3282,6 @@ a {
 .color-options {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
 }
 
 .color-circle {
@@ -3694,7 +3702,7 @@ a {
   text-align: center;
   border-radius: 8px;
   transition: transform 0.2s ease;
-  width: 300px;
+  width: 325px;
 }
 
 .related-product-card:hover {
@@ -3753,6 +3761,7 @@ a {
 }
 
 .rolling-animation {
+  top: -2;
   animation: roll-down 2s infinite;
   position: relative;
   display: inline-block;

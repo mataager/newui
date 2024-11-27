@@ -235,7 +235,8 @@
                                 </div>
 
                                 <div class="color-selector m-5 mb-10">
-                                    <label class="m-5 flex align-items pb-7" for="product-color">Color:<p id="product-color">
+                                    <label class="m-5 flex align-items pb-7" for="product-color">Color:<p
+                                            id="product-color">
                                         <div id="hint" class="hint-text"></div>
                                         </p>
                                     </label>
@@ -247,6 +248,9 @@
 
                                     <div class="color-options m-5 flex-wrap width-80 mb-10">
                                     </div>
+                                    <h5 id="stockContainer" class="mb-10 m-5 flex pl-0 hidden">
+                                        <p id="stockMessage"></p>
+                                    </h5>
                                     <h5 class="mb-10 m-5 flex pl-0">SKU:<p id="productID"></p>
                                     </h5>
                                 </div>
@@ -402,78 +406,7 @@
                             <button class="add-to-cart-btn" onclick="addRelatedProductToCart('product1')">Add to
                                 Cart</button>
                         </div>
-                        <div class="related-product-card">
-                            <img class="related-product-image"
-                                src="https://assets.adidas.com/images/w_940,f_auto,q_auto/7bf7bceec37944589ffe4316342fb4e7_9366/IF4134_01_00_standard.jpg"
-                                alt="Related Product 2">
-                            <h4 class="related-product-title">Product Title 2</h4>
-                            <p class="related-product-price">$25.99</p>
-                            <button class="add-to-cart-btn" onclick="addRelatedProductToCart('product2')">Add to
-                                Cart</button>
-                        </div>
-                        <div class="related-product-card">
-                            <img class="related-product-image"
-                                src="https://assets.adidas.com/images/w_940,f_auto,q_auto/7bf7bceec37944589ffe4316342fb4e7_9366/IF4134_01_00_standard.jpg"
-                                alt="Related Product 3">
-                            <h4 class="related-product-title">Product Title 3</h4>
-                            <p class="related-product-price">$15.49</p>
-                            <button class="add-to-cart-btn" onclick="addRelatedProductToCart('product3')">Add to
-                                Cart</button>
-                        </div>
-                        <div class="related-product-card">
-                            <img class="related-product-image"
-                                src="https://assets.adidas.com/images/w_940,f_auto,q_auto/7bf7bceec37944589ffe4316342fb4e7_9366/IF4134_01_00_standard.jpg"
-                                alt="Related Product 1">
-                            <h4 class="related-product-title">Product Title 4</h4>
-                            <p class="related-product-price">$19.99</p>
-                            <button class="add-to-cart-btn" onclick="addRelatedProductToCart('product1')">Add to
-                                Cart</button>
-                        </div>
-                        <div class="related-product-card">
-                            <img class="related-product-image"
-                                src="https://assets.adidas.com/images/w_940,f_auto,q_auto/7bf7bceec37944589ffe4316342fb4e7_9366/IF4134_01_00_standard.jpg"
-                                alt="Related Product 2">
-                            <h4 class="related-product-title">Product Title 5</h4>
-                            <p class="related-product-price">$25.99</p>
-                            <button class="add-to-cart-btn" onclick="addRelatedProductToCart('product2')">Add to
-                                Cart</button>
-                        </div>
-                        <div class="related-product-card">
-                            <img class="related-product-image"
-                                src="https://assets.adidas.com/images/w_940,f_auto,q_auto/7bf7bceec37944589ffe4316342fb4e7_9366/IF4134_01_00_standard.jpg"
-                                alt="Related Product 3">
-                            <h4 class="related-product-title">Product Title 6</h4>
-                            <p class="related-product-price">$15.49</p>
-                            <button class="add-to-cart-btn" onclick="addRelatedProductToCart('product3')">Add to
-                                Cart</button>
-                        </div>
-                        <div class="related-product-card">
-                            <img class="related-product-image"
-                                src="https://assets.adidas.com/images/w_940,f_auto,q_auto/7bf7bceec37944589ffe4316342fb4e7_9366/IF4134_01_00_standard.jpg"
-                                alt="Related Product 1">
-                            <h4 class="related-product-title">Product Title 7</h4>
-                            <p class="related-product-price">$19.99</p>
-                            <button class="add-to-cart-btn" onclick="addRelatedProductToCart('product1')">Add to
-                                Cart</button>
-                        </div>
-                        <div class="related-product-card">
-                            <img class="related-product-image"
-                                src="https://assets.adidas.com/images/w_940,f_auto,q_auto/7bf7bceec37944589ffe4316342fb4e7_9366/IF4134_01_00_standard.jpg"
-                                alt="Related Product 2">
-                            <h4 class="related-product-title">Product Title 8</h4>
-                            <p class="related-product-price">$25.99</p>
-                            <button class="add-to-cart-btn" onclick="addRelatedProductToCart('product2')">Add to
-                                Cart</button>
-                        </div>
-                        <div class="related-product-card">
-                            <img class="related-product-image"
-                                src="https://assets.adidas.com/images/w_940,f_auto,q_auto/7bf7bceec37944589ffe4316342fb4e7_9366/IF4134_01_00_standard.jpg"
-                                alt="Related Product 3">
-                            <h4 class="related-product-title">Product Title 9</h4>
-                            <p class="related-product-price">$15.49</p>
-                            <button class="add-to-cart-btn" onclick="addRelatedProductToCart('product3')">Add to
-                                Cart</button>
-                        </div>
+
 
                         <!-- Add more product cards as needed -->
                     </div>
@@ -727,6 +660,12 @@
                 prePriceElement.innerHTML = prePriceHTML;
                 productPriceElement.innerHTML = productPriceHTML;
 
+                // Get related products
+                const category = productDetails["category"];
+                const piece = productDetails["piece"];
+                const type = productDetails["type"];
+                fetchRelatedProducts(category, piece, type, key);
+
                 // Handling sizes and colors
                 const sizes = productDetails.sizes;
                 const sizeTabs = document.querySelector('.size-tabs');
@@ -783,6 +722,28 @@
                             colorOption.addEventListener('click', function () {
                                 productColorElement.innerText = color;
                                 checkAndToggleButton("product-Size", "product-color", "addToCartButton");
+
+                                // Display stock quantity
+                                if (colorOptions) {
+                                    // Iterate over colors
+                                    const colors = sizes[size];
+                                    for (const color in colors) {
+                                        const qty = colors[color]["qty"];
+                                        const stockContainer = document.getElementById('stockContainer');
+                                        const stockMessage = document.getElementById('stockMessage');
+
+                                        if (stockContainer && stockMessage) {
+                                            if (qty <= 5) {
+                                                stockMessage.innerText = `Only ${qty} left in stock`;
+                                                stockContainer.classList.remove('hidden'); // Show the container
+                                            } else {
+                                                stockMessage.innerText = ''; // Clear the message
+                                                stockContainer.classList.add('hidden'); // Hide the container
+                                            }
+                                        }
+                                    }
+                                }
+
                             });
 
                             colorOptions.appendChild(colorOption);
@@ -798,6 +759,62 @@
                 console.error("Error fetching product details:", error);
             });
     }
+
+    function fetchRelatedProducts(category, piece, type, currentProductKey) {
+        fetch(`${url}/Stores/${uid}/Products.json`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((allProducts) => {
+                const relatedProductsContainer = document.querySelector('.related-products-container');
+                relatedProductsContainer.innerHTML = ''; // Clear existing related products
+
+                const relatedProducts = [];
+                for (const key in allProducts) {
+                    if (key !== currentProductKey) {
+                        const product = allProducts[key];
+                        // Check for matching category, piece, and type
+                        if (
+                            product.category === category &&
+                            product.piece === piece &&
+                            product.type === type
+                        ) {
+                            relatedProducts.push({ key, ...product });
+                        }
+                    }
+                }
+
+                // Sort products randomly and limit to 10
+                const maxProducts = 10;
+                const shuffledProducts = relatedProducts.sort(() => Math.random() - 0.5);
+                shuffledProducts.slice(0, maxProducts).forEach((product) => {
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('related-product-card');
+                    productCard.setAttribute('onclick', `productDetails('${product.key}')`);
+
+                    productCard.innerHTML = `
+                    <img class="related-product-image" 
+                         src="${product["product-photo"] || 'default-image-url.jpg'}" 
+                         alt="${product["product-title"]}">
+                    <h4 class="related-product-title">${product["product-title"]}</h4>
+                    <p class="related-product-price">${product["Product-Price"]} EGP</p>
+                `;
+
+                    relatedProductsContainer.appendChild(productCard);
+                });
+
+                if (relatedProducts.length === 0) {
+                    relatedProductsContainer.innerHTML = '<p class="no-related-products">No related products found.</p>';
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching related products:", error);
+            });
+    }
+
 
     function calculateSalePrice(originalPrice, saleAmount) {
         return originalPrice - (originalPrice * (saleAmount / 100));
