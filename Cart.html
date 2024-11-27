@@ -282,7 +282,7 @@
                                                                     html: `<div style="display: flex; align-items: center; gap: 10px;">
                                         <img src="${colorImage}" alt="${productsData["product-title"]}" 
                                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;" />
-                                        <span>Only ${availableQty} items available for ${productsData["product-title"]} (${productSize}, ${productColor})</span>
+                                        <span>Only ${availableQty} items available of this product</span>
                                       </div>`,
                                                                 }).then(() => {
                                                                     // Update the cart locally to the available quantity
@@ -396,7 +396,7 @@
                                         totalAmount = cart.reduce((acc, item) => acc + parseFloat(item.price.replace(" EGP", "")) * item.quantity, 0);
                                         const totalAmountDiv = document.getElementById("total-cart-amount");
                                         if (totalAmountDiv) {
-                                            totalAmountDiv.innerText = `Cart Total : ${totalAmount.toFixed(2)} EGP`;
+                                            totalAmountDiv.innerText = `Total : ${totalAmount.toFixed(2)} EGP`;
                                         }
                                     }
 

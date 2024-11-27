@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   let totalAmount = 0;
@@ -88,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
             src="${item["photourl"]}" 
             style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;" 
           />
-          <span>${item["title"]} (${item.productSize}, ${item.productColor}) adjusted to ${item.adjustedQuantity}.</span>
+          <span> your item has adjusted to its maximum stock amount which is : ${item.adjustedQuantity}</span>
         </div>
       `
         )

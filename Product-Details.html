@@ -397,15 +397,7 @@
                     </button>
 
                     <div class="related-products-container">
-                        <div class="related-product-card">
-                            <img class="related-product-image"
-                                src="https://assets.adidas.com/images/w_940,f_auto,q_auto/7bf7bceec37944589ffe4316342fb4e7_9366/IF4134_01_00_standard.jpg"
-                                alt="Related Product 1">
-                            <h4 class="related-product-title">Product Title 1</h4>
-                            <p class="related-product-price">$19.99</p>
-                            <button class="add-to-cart-btn" onclick="addRelatedProductToCart('product1')">Add to
-                                Cart</button>
-                        </div>
+
 
 
                         <!-- Add more product cards as needed -->
@@ -794,13 +786,15 @@
                     const productCard = document.createElement('div');
                     productCard.classList.add('related-product-card');
                     productCard.setAttribute('onclick', `productDetails('${product.key}')`);
-
+                    const productPrice = parseFloat(product["Product-Price"]);
+                    const saleAmount = parseFloat(product["sale-amount"]);
+                    const finalPrice = productPrice - (productPrice * (saleAmount / 100));
                     productCard.innerHTML = `
                     <img class="related-product-image" 
                          src="${product["product-photo"] || 'default-image-url.jpg'}" 
                          alt="${product["product-title"]}">
                     <h4 class="related-product-title">${product["product-title"]}</h4>
-                    <p class="related-product-price">${product["Product-Price"]} EGP</p>
+                    <p class="related-product-price">${finalPrice} EGP</p>
                 `;
 
                     relatedProductsContainer.appendChild(productCard);
@@ -933,52 +927,6 @@
             checkSizeSelection();
         }
 
-        // Function for color selection
-        // function checkSizeSelection() {
-        //     const selectedSize = document.querySelector('.size-radio[style*="background-color: rgb(51, 51, 51)"]');
-        //     const sizeHintTextElement = document.getElementById('size-hint-text');
-
-        //     if (!selectedSize) {
-        //         // Show size hint if no size is selected
-        //         if (sizeHintTextElement) {
-        //             sizeHintTextElement.innerHTML = 'Must choose a size <i class="bi bi-arrow-down"></i>';
-        //             sizeHintTextElement.style.display = 'block';
-        //             sizeHintTextElement.classList.add('rolling-animation');
-
-        //             // Add the underline element dynamically if not already present
-        //             if (!sizeHintTextElement.querySelector('.underline-animation')) {
-        //                 const underlineElement = document.createElement('div');
-        //                 underlineElement.classList.add('underline-animation');
-        //                 sizeHintTextElement.appendChild(underlineElement);
-        //             }
-        //         }
-        //     } else {
-        //         // Hide size hint if a size is selected
-        //         if (sizeHintTextElement) {
-        //             sizeHintTextElement.style.display = 'none';
-        //             sizeHintTextElement.innerText = ''; // Clear the hint text
-        //         }
-        //     }
-        // }
-
-        // function ColorRef(selectedElement) {
-        //     // Get all the color-option elements
-        //     const colorElements = document.querySelectorAll('.color-option');
-
-        //     // Loop through each color and reset the border
-        //     colorElements.forEach(function (element) {
-        //         element.style.border = ''; // Reset the border
-        //     });
-
-        //     // Set the border of the clicked color to 5px solid #c1c1c1
-        //     selectedElement.style.borderBottom = '5px solid #c1c1c1';
-
-        //     // Hide the hint text once a color is selected
-        //     const hintTextElement = document.getElementById('color-hint-text');
-        //     if (hintTextElement) {
-        //         hintTextElement.style.display = 'none'; // Hide the hint text
-        //     }
-        // }
         function checkSizeSelection() {
             const selectedSize = document.querySelector('.size-radio[style*="background-color: rgb(51, 51, 51)"]');
             const sizeHintTextElement = document.getElementById('size-hint-text');
@@ -1054,7 +1002,7 @@
 
 
 </script>
-<script>
+<!-- <script>
     window.addEventListener('DOMContentLoaded', () => {
         const productContainer = document.querySelector('.related-products-container');
         const scrollLeftBtn = document.getElementById('scroll-left');
@@ -1131,7 +1079,235 @@
         navigateToPage(currentPage);
 
     });
+</script> -->
+<script>
+    // window.addEventListener('DOMContentLoaded', () => {
+    //     navigateToPage();
+    //     const productContainer = document.querySelector('.related-products-container');
+    //     const scrollLeftBtn = document.getElementById('scroll-left');
+    //     const scrollRightBtn = document.getElementById('scroll-right');
+    //     const dotsContainer = document.querySelector('.dots-container');
+    //     const productCards = document.querySelectorAll('.related-product-card');
+
+    //     let visibleItemsCount = 4; // Default to 4 items for larger screens
+    //     let moveAmount = 4; // Default to move 4 items per scroll
+    //     let currentPage = 0;
+
+    //     // Function to update dots based on the current page
+    //     const updateDots = () => {
+    //         dotsContainer.innerHTML = ''; // Clear existing dots
+
+    //         const totalPages = Math.ceil(productCards.length / visibleItemsCount);
+
+    //         for (let i = 0; i < totalPages; i++) {
+    //             const dot = document.createElement('span');
+    //             if (i === currentPage) {
+    //                 dot.classList.add('active');
+    //             }
+    //             dot.addEventListener('click', () => navigateToPage(i));
+    //             dotsContainer.appendChild(dot);
+    //         }
+    //     };
+
+    //     // Function to navigate to a specific page
+    //     function navigateToPage() {
+    //         const relatedProductsContainer = document.querySelector('.related-products-container');
+
+    //         if (relatedProductsContainer) {
+    //             const width = relatedProductsContainer.offsetWidth;
+    //             // Continue with your logic
+    //         } else {
+    //             console.error('related-products-container not found');
+    //         }
+    //     }
+
+    //     // Event listener for the left scroll button
+    //     scrollLeftBtn.addEventListener('click', () => {
+    //         if (currentPage > 0) {
+    //             currentPage--;
+    //             navigateToPage(currentPage);
+    //         }
+    //     });
+
+    //     // Event listener for the right scroll button
+    //     scrollRightBtn.addEventListener('click', () => {
+    //         const totalPages = Math.ceil(productCards.length / visibleItemsCount);
+    //         if (currentPage < totalPages - 1) {
+    //             currentPage++;
+    //             navigateToPage(currentPage);
+    //         }
+    //     });
+
+    //     // Enable touch scrolling
+    //     let startTouch = 0;
+    //     let endTouch = 0;
+
+    //     productContainer.addEventListener('touchstart', (e) => {
+    //         startTouch = e.changedTouches[0].pageX;
+    //     });
+
+    //     productContainer.addEventListener('touchend', (e) => {
+    //         endTouch = e.changedTouches[0].pageX;
+    //         if (startTouch - endTouch > 50) {
+    //             // Swiped left (Next)
+    //             const totalPages = Math.ceil(productCards.length / visibleItemsCount);
+    //             if (currentPage < totalPages - 1) {
+    //                 currentPage++;
+    //                 navigateToPage(currentPage);
+    //             }
+    //         } else if (endTouch - startTouch > 50) {
+    //             // Swiped right (Previous)
+    //             if (currentPage > 0) {
+    //                 currentPage--;
+    //                 navigateToPage(currentPage);
+    //             }
+    //         }
+    //     });
+
+    //     // Function to adjust the number of items per page based on screen width
+    //     const adjustDisplay = () => {
+    //         const screenWidth = window.innerWidth;
+
+    //         if (screenWidth > 1365) {
+    //             // For larger screens, show 4 items and move 4 on scroll
+    //             visibleItemsCount = 4;
+    //             moveAmount = 4;
+    //         } else {
+    //             // For smaller screens, show 1 item per page and move 10 on scroll
+    //             visibleItemsCount = 1;
+    //             moveAmount = 10;
+    //         }
+
+    //         // Recalculate the total pages when the screen is resized
+    //         const totalPages = Math.ceil(productCards.length / visibleItemsCount);
+    //         updateDots(); // Update dots based on new total pages
+
+    //         // Set the transform to show the current page's products
+    //         navigateToPage(currentPage);
+    //     };
+
+    //     // Adjust the display when the page loads and when the window is resized
+    //     adjustDisplay();
+    //     window.addEventListener('resize', adjustDisplay);
+
+    //     // Initialize the product display and dots on page load
+    //     navigateToPage(currentPage);
+    // });
+    window.addEventListener('DOMContentLoaded', () => {
+        const productContainer = document.querySelector('.related-products-container');
+        const scrollLeftBtn = document.getElementById('scroll-left');
+        const scrollRightBtn = document.getElementById('scroll-right');
+        const dotsContainer = document.querySelector('.dots-container');
+        const productCards = document.querySelectorAll('.related-product-card');
+
+        let visibleItemsCount = 4; // Default to 4 items for larger screens
+        let moveAmount = 4; // Default to move 4 items per scroll
+        let currentPage = 0;
+
+        // Function to update dots based on the current page
+        const updateDots = () => {
+            dotsContainer.innerHTML = ''; // Clear existing dots
+
+            const totalPages = Math.ceil(productCards.length / visibleItemsCount);
+
+            for (let i = 0; i < totalPages; i++) {
+                const dot = document.createElement('span');
+                if (i === currentPage) {
+                    dot.classList.add('active');
+                }
+                dot.addEventListener('click', () => navigateToPage(i));
+                dotsContainer.appendChild(dot);
+            }
+        };
+
+        // Function to navigate to a specific page
+        function navigateToPage(page = currentPage) {
+            const relatedProductsContainer = document.querySelector('.related-products-container');
+            const totalPages = Math.ceil(productCards.length / visibleItemsCount);
+
+            // Ensure we are within bounds
+            if (page < 0 || page >= totalPages) return;
+
+            currentPage = page;
+            const offset = page * visibleItemsCount * (productCards[0].offsetWidth + parseInt(getComputedStyle(productCards[0]).marginRight));
+
+            // Move the product container using transform
+            relatedProductsContainer.style.transform = `translateX(-${offset}px)`;
+
+            // Update dots and current page
+            updateDots();
+        }
+
+        // Event listener for the left scroll button
+        scrollLeftBtn.addEventListener('click', () => {
+            if (currentPage > 0) {
+                navigateToPage(currentPage - 1);
+            }
+        });
+
+        // Event listener for the right scroll button
+        scrollRightBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(productCards.length / visibleItemsCount);
+            if (currentPage < totalPages - 1) {
+                navigateToPage(currentPage + 1);
+            }
+        });
+
+        // Enable touch scrolling
+        let startTouch = 0;
+        let endTouch = 0;
+
+        productContainer.addEventListener('touchstart', (e) => {
+            startTouch = e.changedTouches[0].pageX;
+        });
+
+        productContainer.addEventListener('touchend', (e) => {
+            endTouch = e.changedTouches[0].pageX;
+            if (startTouch - endTouch > 50) {
+                // Swiped left (Next)
+                if (currentPage < Math.ceil(productCards.length / visibleItemsCount) - 1) {
+                    navigateToPage(currentPage + 1);
+                }
+            } else if (endTouch - startTouch > 50) {
+                // Swiped right (Previous)
+                if (currentPage > 0) {
+                    navigateToPage(currentPage - 1);
+                }
+            }
+        });
+
+        // Function to adjust the number of items per page based on screen width
+        const adjustDisplay = () => {
+            const screenWidth = window.innerWidth;
+
+            if (screenWidth > 1365) {
+                // For larger screens, show 4 items and move 4 on scroll
+                visibleItemsCount = 4;
+                moveAmount = 4;
+            } else {
+                // For smaller screens, show 1 item per page and move 10 on scroll
+                visibleItemsCount = 1;
+                moveAmount = 10;
+            }
+
+            // Recalculate the total pages when the screen is resized
+            const totalPages = Math.ceil(productCards.length / visibleItemsCount);
+            updateDots(); // Update dots based on new total pages
+
+            // Set the transform to show the current page's products
+            navigateToPage(currentPage);
+        };
+
+        // Adjust the display when the page loads and when the window is resized
+        adjustDisplay();
+        window.addEventListener('resize', adjustDisplay);
+
+        // Initialize the product display and dots on page load
+        navigateToPage(currentPage);
+    });
+
 </script>
+
 <script src="./assets/js/update-cart-amont.js"></script>
 <script src="./assets/js/route.js"></script>
 <script src="./assets/js/all.js"></script>

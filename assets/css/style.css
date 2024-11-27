@@ -3713,6 +3713,7 @@ a {
   width: 100%;
   height: auto;
   border-radius: 8px;
+  cursor: pointer;
 }
 
 /* Product title and price */

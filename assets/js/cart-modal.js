@@ -219,10 +219,13 @@ function colorRef(color) {
   colorOptions.forEach((option) => {
     option.style.borderBottom =
       option.dataset.colorName === color ? "5px solid #c1c1c1" : "none";
+    replaceInvalidImages();
   });
 
   updateAddToCartButtonState();
 }
+
+// Call the function after the images are loaded into the DOM
 
 function SizeRef(size) {
   const modalContent = document.querySelector(".modal-content");
@@ -256,79 +259,6 @@ function SizeRef(size) {
   updateAddToCartButtonState();
 }
 
-// function updateAddToCartButtonState() {
-//   const size = document.getElementById("product-Size").innerText.trim(); // Get the selected size
-//   const color = document.getElementById("product-color").innerText.trim(); // Get the selected color
-//   const addToCartButton = document.getElementById("addToCartButton");
-//   const sizeHintTextElement = document.getElementById("size-hint-text");
-//   const colorHintTextElement = document.getElementById("color-hint-text");
-
-//   if (!size) {
-//     // Show the size hint if no size is selected
-//     if (sizeHintTextElement) {
-//       sizeHintTextElement.innerText = "Must choose a size!";
-//       sizeHintTextElement.style.display = "block";
-//       sizeHintTextElement.classList.add("rolling-animation");
-
-//       const underlineElement = document.createElement("div");
-//       underlineElement.classList.add("underline-animation");
-//       if (!sizeHintTextElement.querySelector(".underline-animation")) {
-//         sizeHintTextElement.appendChild(underlineElement);
-//       }
-//     }
-
-//     // Disable "Add to Cart" button until size is selected
-//     addToCartButton.disabled = true;
-//     addToCartButton.style.opacity = 0.5;
-//     addToCartButton.innerHTML =
-//       'Add to Cart <i class="bi bi-exclamation-lg"></i>';
-//     addToCartButton.onclick = null;
-//     return; // Stop further execution until size is selected
-//   }
-
-//   // Hide size hint if size is selected
-//   if (sizeHintTextElement) {
-//     sizeHintTextElement.style.display = "none";
-//     sizeHintTextElement.classList.remove("rolling-animation");
-//     sizeHintTextElement.innerHTML = ""; // Clear any dynamically added underline
-//   }
-
-//   if (!color) {
-//     // Show the color hint if no color is selected
-//     if (colorHintTextElement) {
-//       colorHintTextElement.innerText = "Must choose a color!";
-//       colorHintTextElement.style.display = "block";
-//       colorHintTextElement.classList.add("rolling-animation");
-
-//       const underlineElement = document.createElement("div");
-//       underlineElement.classList.add("underline-animation");
-//       if (!colorHintTextElement.querySelector(".underline-animation")) {
-//         colorHintTextElement.appendChild(underlineElement);
-//       }
-//     }
-
-//     // Disable "Add to Cart" button until color is selected
-//     addToCartButton.disabled = true;
-//     addToCartButton.style.opacity = 0.5;
-//     addToCartButton.innerHTML =
-//       'Add to Cart <i class="bi bi-exclamation-lg"></i>';
-//     addToCartButton.onclick = null;
-//     return; // Stop further execution until color is selected
-//   }
-
-//   // Hide color hint if color is selected
-//   if (colorHintTextElement) {
-//     colorHintTextElement.style.display = "none";
-//     colorHintTextElement.classList.remove("rolling-animation");
-//     colorHintTextElement.innerHTML = ""; // Clear any dynamically added underline
-//   }
-
-//   // Enable "Add to Cart" button when both size and color are selected
-//   addToCartButton.disabled = false;
-//   addToCartButton.style.opacity = 1;
-//   addToCartButton.innerHTML = 'Add to Cart <i class="bi bi-bag-check"></i>';
-//   addToCartButton.onclick = addToCart;
-// }
 function updateAddToCartButtonState() {
   const size = document.getElementById("product-Size").innerText.trim(); // Get the selected size
   const color = document.getElementById("product-color").innerText.trim(); // Get the selected color
@@ -432,3 +362,19 @@ function nextImage() {
 }
 
 //
+function replaceInvalidImages() {
+  // Select all <img> elements inside the container
+  const images = document.querySelectorAll(".content-photo-container img");
+
+  images.forEach((img) => {
+    const src = img.getAttribute("src");
+    // Check if the src is empty, "undefined", or null
+    if (!src || src === "undefined" || src.trim() === "") {
+      // Assign the placeholder image URL
+      img.src =
+        "https://i.imgur.com/gLKw3OD_d.webp?maxwidth=760&fidelity=grand";
+    }
+  });
+}
+// Call the function after the images are loaded into the DOM
+replaceInvalidImages();
