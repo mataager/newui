@@ -188,7 +188,7 @@
         <div class="progress-bar-container flex center">
             <div class="progress-bar flex center">
                 <div class="step completed">
-                    <span class="step-number targeted-step w-h-auto" id="target-1">
+                    <span class="step-number targeted-step w-h-auto" id="target-1" onclick="perv1()">
                         <div class="flex center align-items p-4">
                             <i class="bi bi-bag-check"></i>
                         </div>
@@ -199,7 +199,7 @@
                 <div id="connector1" class="connector"></div>
                 <div class="step completed">
                     <span class="step-number w-h-auto" id="target-2">
-                        <div class="flex center align-items p-4">
+                        <div class="flex center align-items p-4" onclick="Next1()">
                             <i class="bi bi-info-lg"></i>
                         </div>
                     </span>
@@ -207,7 +207,7 @@
                 </div>
                 <div id="connector2" class="connector"></div>
                 <div class="step completed">
-                    <span class="step-number w-h-auto" id="target-3">
+                    <span class="step-number w-h-auto" id="target-3" onclick="Next2()">
                         <div class="flex center align-items p-4">
                             <i class="bi bi-list-check"></i>
                         </div>
@@ -217,7 +217,7 @@
                 <div id="connector3" class="connector"></div>
 
                 <div class="step completed">
-                    <span class="step-number w-h-auto" id="target-4">
+                    <span class="step-number w-h-auto" id="target-4" onclick="Next3()">
                         <div class="flex center align-items p-4">
                             <i class="bi bi-credit-card"></i>
                         </div>
@@ -930,78 +930,102 @@ style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;"
 
 
 
-    <script>
+    <!-- <script>
         // navigation js
         function Next1() {
             // Hide the Cart section and Next1 button
             document.getElementById('cart-card').classList.add('hidden');
-
-
-            // Show the Personal Info section and Next2 button
             document.getElementById('Info-card').classList.remove('hidden');
+            document.getElementById('summary-card').classList.add('hidden');
+            document.getElementById('Payment-card').classList.add('hidden');
 
 
 
             document.getElementById('target-1').classList.remove('targeted-step');
             document.getElementById('target-2').classList.add('targeted-step');
+            document.getElementById('target-3').classList.remove('targeted-step');
+            document.getElementById('target-4').classList.remove('targeted-step');
 
             document.getElementById('connector1').classList.add('connector-after');
+            document.getElementById('connector2').classList.remove('connector-after');
+            document.getElementById('connector3').classList.remove('connector-after');
 
         }
 
         function Next2() {
-            // Hide the Personal Info section and Next2 button
+            document.getElementById('cart-card').classList.add('hidden');
             document.getElementById('Info-card').classList.add('hidden');
-
-
-            // Show the Payment section and Checkout button
             document.getElementById('summary-card').classList.remove('hidden');
+            document.getElementById('Payment-card').classList.add('hidden');
 
 
+            document.getElementById('target-1').classList.remove('targeted-step');
             document.getElementById('target-2').classList.remove('targeted-step');
             document.getElementById('target-3').classList.add('targeted-step');
+            document.getElementById('target-4').classList.remove('targeted-step');
 
+            document.getElementById('connector1').classList.add('connector-after');
             document.getElementById('connector2').classList.add('connector-after');
-
-
-
+            document.getElementById('connector3').classList.remove('connector-after');
         }
         function Next3() {
-            // Hide the Personal Info section and Next2 button
+            document.getElementById('cart-card').classList.add('hidden');
+            document.getElementById('Info-card').classList.add('hidden');
             document.getElementById('summary-card').classList.add('hidden');
             document.getElementById('Payment-card').classList.remove('hidden');
 
-            document.getElementById('connector3').classList.add('connector-after');
+            document.getElementById('target-1').classList.remove('targeted-step');
+            document.getElementById('target-2').classList.remove('targeted-step');
             document.getElementById('target-3').classList.remove('targeted-step');
             document.getElementById('target-4').classList.add('targeted-step');
 
+            document.getElementById('connector1').classList.add('connector-after');
+            document.getElementById('connector2').classList.add('connector-after');
+            document.getElementById('connector3').classList.add('connector-after');
+
         }
         function perv1() {
-            document.getElementById('Info-card').classList.add('hidden');
             document.getElementById('cart-card').classList.remove('hidden');
+            document.getElementById('Info-card').classList.add('hidden');
+            document.getElementById('summary-card').classList.add('hidden');
+            document.getElementById('Payment-card').classList.add('hidden');
 
-            document.getElementById('target-2').classList.remove('targeted-step');
             document.getElementById('target-1').classList.add('targeted-step');
+            document.getElementById('target-2').classList.remove('targeted-step');
+            document.getElementById('target-3').classList.remove('targeted-step');
+            document.getElementById('target-4').classList.remove('targeted-step');
 
-            document.getElementById('connector1').classList.remove('connector-after');
+
+
+            document.getElementById('connector1').classList.add('connector-after');
+            document.getElementById('connector2').classList.remove('connector-after');
+            document.getElementById('connector3').classList.remove('connector-after');
 
         }
         function perv2() {
-            document.getElementById('summary-card').classList.add('hidden');
+            document.getElementById('cart-card').classList.add('hidden');
             document.getElementById('Info-card').classList.remove('hidden');
+            document.getElementById('summary-card').classList.add('hidden');
+            document.getElementById('Payment-card').classList.add('hidden');
 
-            document.getElementById('target-3').classList.remove('targeted-step');
+            document.getElementById('target-1').classList.remove('targeted-step');
             document.getElementById('target-2').classList.add('targeted-step');
+            document.getElementById('target-3').classList.remove('targeted-step');
+            document.getElementById('target-4').classList.remove('targeted-step');
 
             document.getElementById('connector2').classList.remove('connector-after');
 
         }
         function perv3() {
-            document.getElementById('Payment-card').classList.add('hidden');
+            document.getElementById('cart-card').classList.add('hidden');
+            document.getElementById('Info-card').classList.add('hidden');
             document.getElementById('summary-card').classList.remove('hidden');
+            document.getElementById('Payment-card').classList.add('hidden');
 
-            document.getElementById('target-4').classList.remove('targeted-step');
+            document.getElementById('target-1').classList.remove('targeted-step');
+            document.getElementById('target-2').classList.remove('targeted-step');
             document.getElementById('target-3').classList.add('targeted-step');
+            document.getElementById('target-4').classList.remove('targeted-step');
 
             document.getElementById('connector3').classList.remove('connector-after');
 
@@ -1009,8 +1033,65 @@ style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;"
 
         // navigation js
 
-    </script>
+    </script> -->
     <!-- // -->
+    <script>
+        // Manage step navigation
+        function goToStep(step) {
+            const steps = ['cart-card', 'Info-card', 'summary-card', 'Payment-card'];
+            const targets = ['target-1', 'target-2', 'target-3', 'target-4'];
+            const connectors = ['connector1', 'connector2', 'connector3'];
+
+            // Hide all steps and remove 'targeted-step' class
+            steps.forEach((id, index) => {
+                const card = document.getElementById(id);
+                const target = document.getElementById(targets[index]);
+
+                if (card) card.classList.add('hidden');
+                if (target) target.classList.remove('targeted-step');
+            });
+
+            // Show current step
+            const currentCard = document.getElementById(steps[step - 1]);
+            const currentTarget = document.getElementById(targets[step - 1]);
+            if (currentCard) currentCard.classList.remove('hidden');
+            if (currentTarget) currentTarget.classList.add('targeted-step');
+
+            // Update connectors
+            connectors.forEach((id, index) => {
+                const connector = document.getElementById(id);
+                if (connector) {
+                    connector.classList.toggle('connector-after', index < step - 1);
+                }
+            });
+        }
+
+        // Previous and Next functions
+        function Next1() {
+            goToStep(2);
+        }
+
+        function Next2() {
+            goToStep(3);
+        }
+
+        function Next3() {
+            goToStep(4);
+        }
+
+        function perv1() {
+            goToStep(1);
+        }
+
+        function perv2() {
+            goToStep(2);
+        }
+
+        function perv3() {
+            goToStep(3);
+        }
+    </script>
+
     </section>
 
 
