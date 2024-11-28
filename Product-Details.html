@@ -750,6 +750,65 @@
     }
 
 
+    // function fetchRelatedProducts(category, piece, type, currentProductKey) {
+    //     fetch(`${url}/Stores/${uid}/Products.json`)
+    //         .then((response) => {
+    //             if (!response.ok) {
+    //                 throw new Error("Network response was not ok");
+    //             }
+    //             return response.json();
+    //         })
+    //         .then((allProducts) => {
+    //             const relatedProductsContainer = document.querySelector('.related-products-container');
+    //             relatedProductsContainer.innerHTML = ''; // Clear existing related products
+
+    //             const relatedProducts = [];
+    //             for (const key in allProducts) {
+    //                 if (key !== currentProductKey) {
+    //                     const product = allProducts[key];
+    //                     // Check for matching category, piece, and type
+    //                     if (
+    //                         product.category === category &&
+    //                         product.piece === piece &&
+    //                         product.type === type
+    //                     ) {
+    //                         relatedProducts.push({ key, ...product });
+    //                     }
+    //                 }
+    //             }
+
+    //             // Sort products randomly and limit to 10
+    //             const maxProducts = 10;
+    //             const shuffledProducts = relatedProducts.sort(() => Math.random() - 0.5);
+    //             shuffledProducts.slice(0, maxProducts).forEach((product) => {
+    //                 const productCard = document.createElement('div');
+    //                 productCard.classList.add('related-product-card');
+    //                 productCard.setAttribute('onclick', `productDetails('${product.key}')`);
+    //                 const productPrice = parseFloat(product["Product-Price"]);
+    //                 const saleAmount = parseFloat(product["sale-amount"]);
+    //                 const finalPrice = saleAmount > 0
+    //                     ? productPrice - (productPrice * (saleAmount / 100))
+    //                     : productPrice;
+    //                 productCard.innerHTML = `
+    //                 <img class="related-product-image" 
+    //                      src="${product["product-photo"] || 'default-image-url.jpg'}" 
+    //                      alt="${product["product-title"]}">
+    //                 <h4 class="related-product-title">${product["product-title"]}</h4>
+    //                 <p class="related-product-price">${finalPrice} EGP</p>
+    //             `;
+
+    //                 relatedProductsContainer.appendChild(productCard);
+    //             });
+
+    //             if (relatedProducts.length === 0) {
+    //                 relatedProductsContainer.innerHTML = '<p class="no-related-products">No related products found.</p>';
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error fetching related products:", error);
+    //         });
+    // }
+
     function fetchRelatedProducts(category, piece, type, currentProductKey) {
         fetch(`${url}/Stores/${uid}/Products.json`)
             .then((response) => {
@@ -784,17 +843,57 @@
                     const productCard = document.createElement('div');
                     productCard.classList.add('related-product-card');
                     productCard.setAttribute('onclick', `productDetails('${product.key}')`);
+
                     const productPrice = parseFloat(product["Product-Price"]);
                     const saleAmount = parseFloat(product["sale-amount"]);
                     const finalPrice = saleAmount > 0
                         ? productPrice - (productPrice * (saleAmount / 100))
                         : productPrice;
+
+                    // Extract and handle colors
+                    let colorOptionsHtml = "";
+                    let seenColors = new Set();
+                    let extraColorsCount = 0;
+
+                    if (product.sizes) {
+                        Object.keys(product.sizes).forEach((size) => {
+                            const sizeData = product.sizes[size];
+                            Object.keys(sizeData).forEach((color) => {
+                                const colorValue = sizeData[color]["color-value"];
+                                if (!seenColors.has(colorValue)) {
+                                    seenColors.add(colorValue);
+                                    if (seenColors.size <= 3) {
+                                        colorOptionsHtml += `
+                                        <div class="color-option2" 
+                                             style="background-color: ${colorValue};" 
+                                             data-color-name="${color}">
+                                        </div>`;
+                                    } else {
+                                        extraColorsCount++;
+                                    }
+                                }
+                            });
+                        });
+                    }
+
+                    // If there are extra colors, add the "more" circle
+                    if (extraColorsCount > 0) {
+                        colorOptionsHtml += `
+                        <div class="color-option2 flex center align-items font-small" 
+                             style="background-color: #e2e2e2;" 
+                             data-color-name="more">+${extraColorsCount}</div>`;
+                    }
+
+                    // Populate the product card HTML
                     productCard.innerHTML = `
                     <img class="related-product-image" 
-                         src="${product["product-photo"] || 'default-image-url.jpg'}" 
-                         alt="${product["product-title"]}">
+                        src="${product["product-photo"] || 'default-image-url.jpg'}" 
+                        alt="${product["product-title"]}">
+                        <div class="card-content">
+                        <div class="color-options m-5 mb-7 center">${colorOptionsHtml}</div>
                     <h4 class="related-product-title">${product["product-title"]}</h4>
                     <p class="related-product-price">${finalPrice} EGP</p>
+                    </div>
                 `;
 
                     relatedProductsContainer.appendChild(productCard);
