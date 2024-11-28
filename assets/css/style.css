@@ -3742,6 +3742,10 @@ a {
   border-radius: 8px;
   cursor: pointer;
 }
+.no-related-products {
+  margin-top: 38px;
+  margin-left: 50px;
+}
 
 /* Product title and price */
 .related-product-title {
