@@ -3692,8 +3692,35 @@ a {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   position: relative;
+}
+
+.related-product-cards-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.related-product-cards-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  /* Color of the scrollbar thumb */
+  border-radius: 2px;
+
+}
+
+.related-product-cards-container::-webkit-scrollbar-track {
+  background: transparent;
+  /* Background of the scrollbar track */
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+/* For Firefox */
+.related-product-cards-container {
+  scrollbar-width: thin;
+  /* Makes the scrollbar thinner */
+  scrollbar-color: #ccc transparent;
+
 }
 
 /* Product card styling */

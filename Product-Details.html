@@ -392,20 +392,9 @@
                 </h2>
 
                 <div class="related-product-cards-container">
-                    <button id="scroll-left" class="scroll-btn">
-                        <i class="bi bi-arrow-left-short"></i>
-                    </button>
-
                     <div class="related-products-container">
 
-
-
-                        <!-- Add more product cards as needed -->
                     </div>
-
-                    <button id="scroll-right" class="scroll-btn">
-                        <i class="bi bi-arrow-right-short"></i>
-                    </button>
                 </div>
 
                 <div class="dots-container">
@@ -563,6 +552,7 @@
     });
 
 </script>
+
 <script>
     // Function to extract query parameters from URL
     function getParameterByName(name, url) {
@@ -580,6 +570,7 @@
 
 
 </script>
+
 <script>
 
 
@@ -889,6 +880,7 @@
             });
     }
 </script>
+
 <script>
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -1002,311 +994,7 @@
 
 
 </script>
-<!-- <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const productContainer = document.querySelector('.related-products-container');
-        const scrollLeftBtn = document.getElementById('scroll-left');
-        const scrollRightBtn = document.getElementById('scroll-right');
-        const dotsContainer = document.querySelector('.dots-container');
 
-        // Set the number of visible items (4 items)
-        const visibleItemsCount = 4;
-
-        // Get all the product cards
-        const productCards = document.querySelectorAll('.related-product-card');
-
-        // Calculate the total number of pages
-        const totalItems = productCards.length;
-        const totalPages = Math.ceil(totalItems / visibleItemsCount);
-
-        // Initialize the current page
-        let currentPage = 0;
-
-        // Function to update dots based on the current page
-        const updateDots = () => {
-            // Clear the existing dots
-            dotsContainer.innerHTML = '';
-
-            // Create new dots for each page
-            for (let i = 0; i < totalPages; i++) {
-                const dot = document.createElement('span'); if (i === currentPage) {
-                    dot.classList.add('active');
-                } dot.addEventListener('click', () => navigateToPage(i));
-                dotsContainer.appendChild(dot);
-            }
-        };
-
-        // Function to navigate to a specific page
-        const navigateToPage = (page) => {
-            currentPage = page;
-            const offset = currentPage * visibleItemsCount;
-            productContainer.style.transform = `translateX(-${offset * (productCards[0].offsetWidth + 20)}px)`;
-            updateDots();
-        };
-
-        // Event listener for the left scroll button
-        scrollLeftBtn.addEventListener('click', () => {
-            if (currentPage > 0) {
-                currentPage--;
-                navigateToPage(currentPage);
-            }
-        });
-
-        // Event listener for the right scroll button
-        scrollRightBtn.addEventListener('click', () => {
-            if (currentPage < totalPages - 1) { currentPage++; navigateToPage(currentPage); }
-        }); // Enable touch scrolling let
-        startTouch = 0; let endTouch = 0; productContainer.addEventListener('touchstart', (e) => {
-            startTouch = e.changedTouches[0].pageX;
-        });
-
-        productContainer.addEventListener('touchend', (e) => {
-            endTouch = e.changedTouches[0].pageX;
-            if (startTouch - endTouch > 50) {
-                // Swiped left (Next)
-                if (currentPage < totalPages - 1) { currentPage++; navigateToPage(currentPage); }
-            } else if (endTouch -
-                startTouch > 50) {
-                // Swiped right (Previous)
-                if (currentPage > 0) {
-                    currentPage--;
-                    navigateToPage(currentPage);
-                }
-            }
-        });
-
-        // Initialize the product display and dots on page load
-        navigateToPage(currentPage);
-
-    });
-</script> -->
-<script>
-    // window.addEventListener('DOMContentLoaded', () => {
-    //     navigateToPage();
-    //     const productContainer = document.querySelector('.related-products-container');
-    //     const scrollLeftBtn = document.getElementById('scroll-left');
-    //     const scrollRightBtn = document.getElementById('scroll-right');
-    //     const dotsContainer = document.querySelector('.dots-container');
-    //     const productCards = document.querySelectorAll('.related-product-card');
-
-    //     let visibleItemsCount = 4; // Default to 4 items for larger screens
-    //     let moveAmount = 4; // Default to move 4 items per scroll
-    //     let currentPage = 0;
-
-    //     // Function to update dots based on the current page
-    //     const updateDots = () => {
-    //         dotsContainer.innerHTML = ''; // Clear existing dots
-
-    //         const totalPages = Math.ceil(productCards.length / visibleItemsCount);
-
-    //         for (let i = 0; i < totalPages; i++) {
-    //             const dot = document.createElement('span');
-    //             if (i === currentPage) {
-    //                 dot.classList.add('active');
-    //             }
-    //             dot.addEventListener('click', () => navigateToPage(i));
-    //             dotsContainer.appendChild(dot);
-    //         }
-    //     };
-
-    //     // Function to navigate to a specific page
-    //     function navigateToPage() {
-    //         const relatedProductsContainer = document.querySelector('.related-products-container');
-
-    //         if (relatedProductsContainer) {
-    //             const width = relatedProductsContainer.offsetWidth;
-    //             // Continue with your logic
-    //         } else {
-    //             console.error('related-products-container not found');
-    //         }
-    //     }
-
-    //     // Event listener for the left scroll button
-    //     scrollLeftBtn.addEventListener('click', () => {
-    //         if (currentPage > 0) {
-    //             currentPage--;
-    //             navigateToPage(currentPage);
-    //         }
-    //     });
-
-    //     // Event listener for the right scroll button
-    //     scrollRightBtn.addEventListener('click', () => {
-    //         const totalPages = Math.ceil(productCards.length / visibleItemsCount);
-    //         if (currentPage < totalPages - 1) {
-    //             currentPage++;
-    //             navigateToPage(currentPage);
-    //         }
-    //     });
-
-    //     // Enable touch scrolling
-    //     let startTouch = 0;
-    //     let endTouch = 0;
-
-    //     productContainer.addEventListener('touchstart', (e) => {
-    //         startTouch = e.changedTouches[0].pageX;
-    //     });
-
-    //     productContainer.addEventListener('touchend', (e) => {
-    //         endTouch = e.changedTouches[0].pageX;
-    //         if (startTouch - endTouch > 50) {
-    //             // Swiped left (Next)
-    //             const totalPages = Math.ceil(productCards.length / visibleItemsCount);
-    //             if (currentPage < totalPages - 1) {
-    //                 currentPage++;
-    //                 navigateToPage(currentPage);
-    //             }
-    //         } else if (endTouch - startTouch > 50) {
-    //             // Swiped right (Previous)
-    //             if (currentPage > 0) {
-    //                 currentPage--;
-    //                 navigateToPage(currentPage);
-    //             }
-    //         }
-    //     });
-
-    //     // Function to adjust the number of items per page based on screen width
-    //     const adjustDisplay = () => {
-    //         const screenWidth = window.innerWidth;
-
-    //         if (screenWidth > 1365) {
-    //             // For larger screens, show 4 items and move 4 on scroll
-    //             visibleItemsCount = 4;
-    //             moveAmount = 4;
-    //         } else {
-    //             // For smaller screens, show 1 item per page and move 10 on scroll
-    //             visibleItemsCount = 1;
-    //             moveAmount = 10;
-    //         }
-
-    //         // Recalculate the total pages when the screen is resized
-    //         const totalPages = Math.ceil(productCards.length / visibleItemsCount);
-    //         updateDots(); // Update dots based on new total pages
-
-    //         // Set the transform to show the current page's products
-    //         navigateToPage(currentPage);
-    //     };
-
-    //     // Adjust the display when the page loads and when the window is resized
-    //     adjustDisplay();
-    //     window.addEventListener('resize', adjustDisplay);
-
-    //     // Initialize the product display and dots on page load
-    //     navigateToPage(currentPage);
-    // });
-    window.addEventListener('DOMContentLoaded', () => {
-        const productContainer = document.querySelector('.related-products-container');
-        const scrollLeftBtn = document.getElementById('scroll-left');
-        const scrollRightBtn = document.getElementById('scroll-right');
-        const dotsContainer = document.querySelector('.dots-container');
-        const productCards = document.querySelectorAll('.related-product-card');
-
-        let visibleItemsCount = 4; // Default to 4 items for larger screens
-        let moveAmount = 4; // Default to move 4 items per scroll
-        let currentPage = 0;
-
-        // Function to update dots based on the current page
-        const updateDots = () => {
-            dotsContainer.innerHTML = ''; // Clear existing dots
-
-            const totalPages = Math.ceil(productCards.length / visibleItemsCount);
-
-            for (let i = 0; i < totalPages; i++) {
-                const dot = document.createElement('span');
-                if (i === currentPage) {
-                    dot.classList.add('active');
-                }
-                dot.addEventListener('click', () => navigateToPage(i));
-                dotsContainer.appendChild(dot);
-            }
-        };
-
-        // Function to navigate to a specific page
-        function navigateToPage(page = currentPage) {
-            const relatedProductsContainer = document.querySelector('.related-products-container');
-            const totalPages = Math.ceil(productCards.length / visibleItemsCount);
-
-            // Ensure we are within bounds
-            if (page < 0 || page >= totalPages) return;
-
-            currentPage = page;
-            const offset = page * visibleItemsCount * (productCards[0].offsetWidth + parseInt(getComputedStyle(productCards[0]).marginRight));
-
-            // Move the product container using transform
-            relatedProductsContainer.style.transform = `translateX(-${offset}px)`;
-
-            // Update dots and current page
-            updateDots();
-        }
-
-        // Event listener for the left scroll button
-        scrollLeftBtn.addEventListener('click', () => {
-            if (currentPage > 0) {
-                navigateToPage(currentPage - 1);
-            }
-        });
-
-        // Event listener for the right scroll button
-        scrollRightBtn.addEventListener('click', () => {
-            const totalPages = Math.ceil(productCards.length / visibleItemsCount);
-            if (currentPage < totalPages - 1) {
-                navigateToPage(currentPage + 1);
-            }
-        });
-
-        // Enable touch scrolling
-        let startTouch = 0;
-        let endTouch = 0;
-
-        productContainer.addEventListener('touchstart', (e) => {
-            startTouch = e.changedTouches[0].pageX;
-        });
-
-        productContainer.addEventListener('touchend', (e) => {
-            endTouch = e.changedTouches[0].pageX;
-            if (startTouch - endTouch > 50) {
-                // Swiped left (Next)
-                if (currentPage < Math.ceil(productCards.length / visibleItemsCount) - 1) {
-                    navigateToPage(currentPage + 1);
-                }
-            } else if (endTouch - startTouch > 50) {
-                // Swiped right (Previous)
-                if (currentPage > 0) {
-                    navigateToPage(currentPage - 1);
-                }
-            }
-        });
-
-        // Function to adjust the number of items per page based on screen width
-        const adjustDisplay = () => {
-            const screenWidth = window.innerWidth;
-
-            if (screenWidth > 1365) {
-                // For larger screens, show 4 items and move 4 on scroll
-                visibleItemsCount = 4;
-                moveAmount = 4;
-            } else {
-                // For smaller screens, show 1 item per page and move 10 on scroll
-                visibleItemsCount = 1;
-                moveAmount = 10;
-            }
-
-            // Recalculate the total pages when the screen is resized
-            const totalPages = Math.ceil(productCards.length / visibleItemsCount);
-            updateDots(); // Update dots based on new total pages
-
-            // Set the transform to show the current page's products
-            navigateToPage(currentPage);
-        };
-
-        // Adjust the display when the page loads and when the window is resized
-        adjustDisplay();
-        window.addEventListener('resize', adjustDisplay);
-
-        // Initialize the product display and dots on page load
-        navigateToPage(currentPage);
-    });
-
-</script>
 
 <script src="./assets/js/update-cart-amont.js"></script>
 <script src="./assets/js/route.js"></script>
