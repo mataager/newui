@@ -1650,6 +1650,10 @@ a.footer-link:is(:hover, :focus) {
   .li-action {
     margin-bottom: 10px;
   }
+
+  .manage-cart-item {
+    flex-direction: column !important;
+  }
 }
 
 #cart-items h5 {
@@ -3696,8 +3700,11 @@ a {
   overflow-y: hidden;
   position: relative;
   scrollbar-width: none;
+  /* For Firefox */
   -ms-overflow-style: none;
+  /* For Internet Explorer and Edge */
 }
+
 
 
 
@@ -3720,15 +3727,16 @@ a {
   border-radius: 8px;
   cursor: pointer;
 }
-.no-related-products {
-  margin-top: 38px;
-  margin-left: 50px;
-}
 
 /* Product title and price */
 .related-product-title {
   font-size: 18px;
   margin-top: 10px;
+}
+
+.no-related-products {
+  margin-top: 38px;
+  margin-left: 50px;
 }
 
 .related-product-price {

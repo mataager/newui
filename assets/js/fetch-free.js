@@ -171,7 +171,7 @@ function fetchAndRenderProducts() {
           });
 
           if (colorsArray.length > 3) {
-            colorOptionsHTML += `<div class="color-option2 flex center align-items font-small" style="background-color: #e2e2e2;" data-color-name="more">+${
+            colorOptionsHTML += `<div class="color-option2 flex center align-items font-small"  onclick="productDetails('${key}')" style="background-color: #e2e2e2;" data-color-name="more">+${
               allColors.size - 3
             }</div>`;
           }

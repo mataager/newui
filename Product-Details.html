@@ -605,6 +605,12 @@
 
                 // Populate product details
                 BrandNameElement.innerText = productDetails["Brand-Name"];
+                BrandNameElement.setAttribute(
+                    "onclick",
+                    `brand('${productDetails["Brand-Name"]}')`
+                );
+
+
                 productTitleElement.innerText = productDetails["product-title"];
                 productID.innerText = key;
                 const imageKeys = ["product-photo", "product-photo2", "product-photo3", "product-photo4", "product-photo5", "product-photo6"];
@@ -742,6 +748,7 @@
                 console.error("Error fetching product details:", error);
             });
     }
+
 
     function fetchRelatedProducts(category, piece, type, currentProductKey) {
         fetch(`${url}/Stores/${uid}/Products.json`)
@@ -996,6 +1003,14 @@
 
 
 </script>
+<script>
+    // The function to handle the redirection
+    function brand(brandName) {
+        const encodedBrand = encodeURIComponent(brandName); // Ensure URL safety
+        window.location.href = `brand.html?brand=${encodedBrand}`;
+    }
+</script>
+
 
 
 <script src="./assets/js/update-cart-amont.js"></script>

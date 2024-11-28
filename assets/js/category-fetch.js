@@ -1,5 +1,3 @@
-
-
 //v3
 function getFilterFromUrl() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -42,17 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  // function updateCategoryTitle(category, piece, type) {
-  //   const categoryTitleElement = document.getElementById("category-title");
-  //   if (category || piece || type) {
-  //     categoryTitleElement.textContent = `Shop All ${
-  //       category || piece || type
-  //     }`;
-  //   } else {
-  //     categoryTitleElement.textContent = "shop all";
-  //   }
-  // }
-  
   function updateCategoryTitle(category, piece, type) {
     const categoryTitleElement = document.getElementById("category-title");
     categoryTitleElement.classList.add("lowercase");
@@ -80,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
     categoryTitleElement.textContent = title || "Shop All";
   }
 
-
   function filterProducts(category, piece, type) {
     if (category || piece || type) {
       allProducts = Object.keys(allData)
@@ -101,7 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
       allProducts = Object.keys(allData).reverse(); // Reverse the product keys to sort from latest to earliest
     }
   }
-
 
   function renderProducts() {
     const productList = document.querySelector(".product-list");
@@ -155,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (colorsArray.length > 3) {
-        colorOptionsHTML += `<div class="color-option2 flex center align-items font-small" style="background-color: #e2e2e2;" data-color-name="more">+${
+        colorOptionsHTML += `<div class="color-option2 flex center align-items font-small" onclick="productDetails('${key}')" style="background-color: #e2e2e2;" data-color-name="more">+${
           allColors.size - 3
         }</div>`;
       }
