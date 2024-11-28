@@ -779,7 +779,9 @@
                     productCard.setAttribute('onclick', `productDetails('${product.key}')`);
                     const productPrice = parseFloat(product["Product-Price"]);
                     const saleAmount = parseFloat(product["sale-amount"]);
-                    const finalPrice = productPrice - (productPrice * (saleAmount / 100));
+                    const finalPrice = saleAmount > 0
+                        ? productPrice - (productPrice * (saleAmount / 100))
+                        : productPrice;
                     productCard.innerHTML = `
                     <img class="related-product-image" 
                          src="${product["product-photo"] || 'default-image-url.jpg'}" 
