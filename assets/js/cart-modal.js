@@ -109,7 +109,9 @@ function openCartModal(productId) {
     </div>
     
     </div>
-    <h5 class="m-5" id="BrandName">${product["Brand-Name"]}</h5>
+    <h5 class="m-5 pointer" id="BrandName" onclick="brand('${
+      product["Brand-Name"]
+    }')">${product["Brand-Name"]}</h5>
      <h2 class="m-5 pointer" onclick="productDetails('${productId}')" id="productTitle">${
         product["product-title"]
       }</h2>

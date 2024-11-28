@@ -423,7 +423,7 @@
                                             const textDiv = document.createElement("div");
                                             textDiv.classList.add("Product-record");
                                             textDiv.innerHTML = `
-                                                                            <h5>${item.brand}</h5>
+                                                                            <h5 class="pointer" onclick="brand('${item.brand}')">${item.brand}</h5>
                                                                             <p class="cart-font-smaller">${item.title}</p>
                                                                             <p>Size: ${item.productSize}</p>
                                                                             <p>Color: ${item.productColor}</p>
@@ -547,15 +547,39 @@
                                     placeholder="optional.." class="input-cart">
                             </div>
                             <div class="fit-content m-5">
-                                <h5 class="h5-form">Government</h5>
+                                <h5 class="h5-form">Governorate</h5>
                                 <select id="city" name="city" required="" class="input-cart select-city">
                                     <option value="Cairo">Cairo</option>
                                     <option value="Giza">Giza</option>
                                     <option value="Alexandria">Alexandria</option>
-                                    <option value="Al-Sharqia">Al-Sharqia</option>
+                                    <option value="Aswan">Aswan</option>
+                                    <option value="Asyut">Asyut</option>
+                                    <option value="Beheira">Beheira</option>
+                                    <option value="Beni Suef">Beni Suef</option>
+                                    <option value="Dakahlia">Dakahlia</option>
+                                    <option value="Damietta">Damietta</option>
+                                    <option value="Faiyum">Faiyum</option>
+                                    <option value="Gharbia">Gharbia</option>
+                                    <option value="Ismailia">Ismailia</option>
+                                    <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+                                    <option value="Luxor">Luxor</option>
+                                    <option value="Matruh">Matruh</option>
+                                    <option value="Minya">Minya</option>
+                                    <option value="Monufia">Monufia</option>
+                                    <option value="New Valley">New Valley</option>
+                                    <option value="North Sinai">North Sinai</option>
+                                    <option value="Port Said">Port Said</option>
+                                    <option value="Qalyubia">Qalyubia</option>
+                                    <option value="Qena">Qena</option>
+                                    <option value="Red Sea">Red Sea</option>
+                                    <option value="Sharqia">Sharqia</option>
+                                    <option value="Sohag">Sohag</option>
+                                    <option value="South Sinai">South Sinai</option>
+                                    <option value="Suez">Suez</option>
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
+
                             <div class="fit-content m-5">
                                 <h5 class="h5-form">Area</h5>
                                 <input type="text" id="area" name="text" placeholder="ex: el-kawmia" required=""
@@ -705,11 +729,11 @@
                                 </span>
                             </div>
                             <div class="flex-column flex-grow">
-                                <div class="flex center">
+                                <!-- <div class="flex center">
                                     <span class="small-txt m-5 txt-center line-height-15">The shipping cost will be 100
                                         EGP - if your
                                         Government is not Cairo</span>
-                                </div>
+                                </div> -->
                                 <div class="flex center">
                                     <span class="small-txt m-5 txt-center line-height-15 flex">- Free shipping on orders
                                         over
@@ -789,7 +813,6 @@
                     </button>
                 </div>
                 <script>
-
                     function updateCartSummary() {
                         // Retrieve cart items from localStorage
                         let cart = localStorage.getItem('cart');
@@ -805,23 +828,60 @@
                             // Iterate through cart items and sum up the prices
                             cart.forEach(item => {
                                 // Extract the numeric value from the price string and convert it to a number
-                                let price = parseFloat(item.price.replace(' EGP', ''));
-                                totalPrice += price;
+                                let price = parseFloat(item.price.replace(' EGP', '')) || 0; // Handle invalid prices gracefully
+                                let quantity = parseInt(item.quantity) || 1; // Default to 1 if quantity is missing or invalid
+
+                                // Add the product of price and quantity to the total price
+                                totalPrice += price * quantity;
                             });
 
                             // Update the cart total element in the DOM
-                            document.getElementById('cart-total').innerText = `${totalPrice} EGP`;
+                            document.getElementById('cart-total').innerText = `${totalPrice.toFixed(2)} EGP`;
 
                             // Retrieve the shipping fees from the DOM and convert it to a number
-                            let shippingFees = parseFloat(document.getElementById('shipping-fees-total').innerText);
+                            let shippingFees = parseFloat(document.getElementById('shipping-fees-total').innerText) || 0;
 
                             // Calculate the final price
                             let finalPrice = totalPrice + shippingFees;
 
                             // Update the total price element in the DOM
-                            document.getElementById('total-price').innerText = `${finalPrice} EGP`;
+                            document.getElementById('total-price').innerText = `${finalPrice.toFixed(2)} EGP`;
                         }
                     }
+
+
+                    // function updateCartSummary() {
+                    //     // Retrieve cart items from localStorage
+                    //     let cart = localStorage.getItem('cart');
+
+                    //     // Check if the cart is not empty
+                    //     if (cart) {
+                    //         // Parse the JSON string into an array
+                    //         cart = JSON.parse(cart);
+
+                    //         // Initialize total price
+                    //         let totalPrice = 0;
+
+                    //         // Iterate through cart items and sum up the prices
+                    //         cart.forEach(item => {
+                    //             // Extract the numeric value from the price string and convert it to a number
+                    //             let price = parseFloat(item.price.replace(' EGP', ''));
+                    //             totalPrice += price;
+                    //         });
+
+                    //         // Update the cart total element in the DOM
+                    //         document.getElementById('cart-total').innerText = `${totalPrice} EGP`;
+
+                    //         // Retrieve the shipping fees from the DOM and convert it to a number
+                    //         let shippingFees = parseFloat(document.getElementById('shipping-fees-total').innerText);
+
+                    //         // Calculate the final price
+                    //         let finalPrice = totalPrice + shippingFees;
+
+                    //         // Update the total price element in the DOM
+                    //         document.getElementById('total-price').innerText = `${finalPrice} EGP`;
+                    //     }
+                    // }
 
                     // Function to observe changes in the shipping fees element
                     function observeShippingFees() {

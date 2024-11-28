@@ -605,6 +605,7 @@
 
                 // Populate product details
                 BrandNameElement.innerText = productDetails["Brand-Name"];
+                BrandNameElement.classList.add("pointer");
                 BrandNameElement.setAttribute(
                     "onclick",
                     `brand('${productDetails["Brand-Name"]}')`
@@ -1102,13 +1103,7 @@
 
 
 </script>
-<script>
-    // The function to handle the redirection
-    function brand(brandName) {
-        const encodedBrand = encodeURIComponent(brandName); // Ensure URL safety
-        window.location.href = `brand.html?brand=${encodedBrand}`;
-    }
-</script>
+
 
 
 

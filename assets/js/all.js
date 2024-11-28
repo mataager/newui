@@ -99,3 +99,10 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 //handle page title
 document.getElementById("store-title").innerHTML = storename;
+
+//
+// The function to handle the redirection
+function brand(brandName) {
+  const encodedBrand = encodeURIComponent(brandName); // Ensure URL safety
+  window.location.href = `brand.html?brand=${encodedBrand}`;
+}

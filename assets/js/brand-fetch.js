@@ -60,7 +60,6 @@ function filterProductsByCategoryOrBrand(categoryOrBrand) {
   }
 }
 
-
 // Update the renderProducts function
 function renderProducts() {
   const productList = document.querySelector(".product-list");
@@ -176,6 +175,15 @@ function renderProducts() {
   });
 
   updatePaginationButtons();
+  // Set up event listeners for "Add to Cart" buttons
+  const addToCartButtons = document.querySelectorAll(".add-to-cart-btn");
+  addToCartButtons.forEach((button) =>
+    button.addEventListener("click", (event) => {
+      const productId =
+        event.target.closest(".add-to-cart-btn").dataset.productId;
+      openCartModal(productId);
+    })
+  );
 }
 
 // Update pagination buttons
