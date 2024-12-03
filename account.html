@@ -181,7 +181,7 @@
         <div class="loader"></div>
     </div>
 
-    <div class="flex flex-direction-column align-items ">
+    <div class="flex flex-direction-column align-items">
         <div class="flex align-items justify-content-space-between">
             <div class="flex align-items section-title">
                 <h5 class="grey pointer" onclick="changeFrameSrc('index.html')">Home</h5>/
@@ -301,25 +301,34 @@
             $(document).ready(function () {
                 $('#search-order').on('keyup', function () {
                     const searchValue = $(this).val().toLowerCase();
+                    let matchFound = false; // Flag to track if any order matches
+
                     $('.order-card').each(function () {
                         const orderId = $(this).find('.order-header h5').text().toLowerCase();
                         if (orderId.includes(searchValue)) {
                             $(this).show();
+                            matchFound = true; // Match found
                         } else {
                             $(this).hide();
                         }
                     });
+
+                    // Check if any orders matched and handle the "no order found" message
+                    if (!matchFound) {
+                        if ($('#no-orders-found').length === 0) {
+                            // Append "no order found" message if it doesn't already exist
+                            $('.order-history-grid').append('<div id="no-orders-found" class="no-orders-message">No orders with this ID</div>');
+                        }
+                    } else {
+                        // Remove the "no order found" message if any order matches
+                        $('#no-orders-found').remove();
+                    }
                 });
             });
         </script>
 
 
 
-        <!-- <div>
-            <button class="signout-btn" id="signout-btn">
-                <div class="flex align-items"><ion-icon class="mr-5" name="log-out-outline"></ion-icon>Sign Out</div>
-            </button>
-        </div> -->
         <div class="mt-20">
             <button id="signout-btn">
                 <div class="flex align-items signout-btn p-10">

@@ -3959,6 +3959,14 @@ a {
 
 .content-section {
   padding: 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* For Firefox */
+}
+
+.content-section::-webkit-scrollbar {
+  display: none;
+  /* For Chrome, Safari, and Edge */
 }
 
 .content-section.hidden {
@@ -4088,4 +4096,9 @@ th {
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.no-orders-message {
+  font-size: small;
+  padding: 10px;
 }
