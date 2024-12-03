@@ -182,40 +182,155 @@
     </div>
 
     <div class="flex flex-direction-column align-items m-50">
-        <div class="flex center width-available">
-            <h1>Account</h1>
+        <div class="flex align-items justify-content-space-between">
+            <div class="flex align-items section-title">
+                <h5 class="grey pointer" onclick="changeFrameSrc('index.html')">Home</h5>/
+                <h5>Account</h5>
+            </div>
         </div>
 
         <div class="mt-20">
             <button id="google-signin-btn">
                 <div class="flex align-items google-signin-btn p-10">
-                    <i class="bi bi-google mr-5"></i>
-                    Sign in with Google
+                    <i class="sign-txt bi bi-google mr-5"></i>
+                    <div class="sign-txt">
+                        Sign in with Google
+                    </div>
                 </div>
             </button>
         </div>
         <div class="mt-20">
             <button id="email-signin-btn" onclick="emailPasswordSignIn()">
                 <div class="flex align-items google-signin-btn p-10">
-                    <i class="bi bi-envelope-fill mr-5"></i> sign in with email & password
+                    <i class="sign-txt bi bi-envelope-fill mr-5"></i>
+                    <div class="sign-txt">
+                        sign in with email & password
+                    </div>
                 </div>
             </button>
         </div>
 
-        <div id="user-info" style="display: none;">
-            <div class="user-info flex flex-direction-column align-items">
-                <img id="user-photo" src="" alt="User Photo">
-                <div class="flex flex-direction-column align-items">
-                    <h4 id="user-name"></h4>
-                    <p id="user-email"></p>
+
+        <div id="user-info" style="display: none;" class="user-dashboard">
+            <div class="user-header">
+                <div class="user-info flex">
+                    <img id="user-photo" src="" alt="https://i.imgur.com/Zaneuop.png">
+                    <div class="user-details">
+                        <h4 id="user-name">No Name</h4>
+                        <p id="user-email">peacockoriginal56357@gmail.com</p>
+                    </div>
                 </div>
             </div>
+            <div class="user-navigation">
+                <ul class="nav-tabs">
+                    <li class="nav-tab active" onclick="showSection('order-history')">Order History</li>
+                    <li class="nav-tab" onclick="showSection('account-settings')">Account Settings</li>
+                    <li class="nav-tab" onclick="showSection('favourite-items')">Favourite Items</li>
+                </ul>
+            </div>
+            <div class="content-section" id="order-history">
+                <!-- Search bar for Order ID -->
+                <div class="order-search">
+                    <input type="text" id="search-order" placeholder="Search by Order ID">
+                </div>
+
+                <div class="order-history-grid">
+                    <div class="order-card">
+                        <div class="order-header">
+                            <h5>Order #001</h5>
+                            <span class="status shipped">Shipped</span>
+                        </div>
+                        <div class="order-details">
+                            <span>Date: 01/01/2024</span>
+                            <span>Total: $150</span>
+                            <span>Address: 123 Main Street, NY</span>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn-view">View</button>
+                            <button class="btn-cancel">Cancel</button>
+                        </div>
+                    </div>
+
+                    <div class="order-card">
+                        <div class="order-header">
+                            <h5>Order #002</h5>
+                            <span class="status pending">Pending</span>
+                        </div>
+                        <div class="order-details">
+                            <span>Date: 02/01/2024</span>
+                            <span>Total: $200</span>
+                            <span>Address: 456 Elm Street, LA</span>
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn-view">View</button>
+                            <button class="btn-cancel">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section hidden" id="account-settings">
+                <h3>Account Settings</h3>
+                <p>Manage your account details here.</p>
+            </div>
+            <div class="content-section hidden" id="favourite-items">
+                <h3>Favourite Items</h3>
+                <p>Your saved favourite items will appear here.</p>
+            </div>
         </div>
-        <div>
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script>
+            function showSection(sectionId) {
+                const sections = document.querySelectorAll('.content-section');
+                const tabs = document.querySelectorAll('.nav-tab');
+
+                sections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+
+                tabs.forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                document.getElementById(sectionId).classList.remove('hidden');
+                document.querySelector(`.nav-tab[onclick="showSection('${sectionId}')"]`).classList.add('active');
+            }
+
+            // jQuery for searching orders by Order ID
+            $(document).ready(function () {
+                $('#search-order').on('keyup', function () {
+                    const searchValue = $(this).val().toLowerCase();
+                    $('.order-card').each(function () {
+                        const orderId = $(this).find('.order-header h5').text().toLowerCase();
+                        if (orderId.includes(searchValue)) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+            });
+        </script>
+
+
+
+        <!-- <div>
             <button class="signout-btn" id="signout-btn">
                 <div class="flex align-items"><ion-icon class="mr-5" name="log-out-outline"></ion-icon>Sign Out</div>
             </button>
+        </div> -->
+        <div class="mt-20">
+            <button id="signout-btn">
+                <div class="flex align-items signout-btn p-10">
+                    <i class="sign-txt bi bi-box-arrow-right mr-5"></i>
+                    <div class="sign-txt">
+                        Sign out
+                    </div>
+                </div>
+            </button>
         </div>
+
 
     </div>
     <div class="flex center">

@@ -3458,22 +3458,94 @@ a {
   margin: 5px 0;
 }
 
-.google-signin-btn,
+/* .google-signin-btn,
 .signout-btn {
+  font-size: small;
+  padding: 15px !important;
   background-color: #000000;
   padding: 5px;
-  border-radius: 5px;
+  border-radius: 38px;
   color: white;
   border: 1px solid #000000;
-}
+} */
 
-
-
+/* Common button styles */
+.google-signin-btn,
+.email-signin-btn,
 .signout-btn {
-  margin-top: 10px;
-  border-radius: 5px !important;
   font-size: small;
+  padding: 10px;
+  background-color: #000000;
+  border-radius: 10px;
+  color: white;
+  border: 2px solid #000000;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
+
+/* Pseudo-element for background transition */
+.google-signin-btn::before,
+.email-signin-btn::before,
+.signout-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+/* On hover, set the background color to white */
+.google-signin-btn:hover,
+.email-signin-btn:hover,
+.signout-btn:hover {
+  background-color: white;
+  color: #000000;
+  /* Change text color to black when hovered */
+  border: 2px solid #000000;
+  /* Border becomes 2px solid black */
+}
+
+/* Move the background (pseudo-element) from left to right on hover */
+.google-signin-btn:hover::before,
+.email-signin-btn:hover::before,
+.signout-btn:hover::before {
+  left: 0;
+}
+
+/* Make the text and icon color change to black */
+.google-signin-btn:hover .sign-txt,
+.email-signin-btn:hover .sign-txt,
+.signout-btn:hover .sign-txt {
+  color: #000000;
+  /* Ensure the text is black */
+  z-index: 100;
+  /* Bring the text to the front */
+}
+
+/* Ensure the icon also changes color to black */
+.google-signin-btn:hover i,
+.email-signin-btn:hover i,
+.signout-btn:hover i {
+  color: #000000;
+  /* Ensure the icon is black */
+}
+
+/* Styling for the flex container */
+.google-signin-btn .flex,
+.email-signin-btn .flex,
+.signout-btn .flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* Signout button additional style */
+
 
 /* General layout for larger screens */
 .content-photo-container {
@@ -3815,4 +3887,205 @@ a {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* // */
+.user-dashboard {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.user-header {
+  background: linear-gradient(90deg, #090b11, #999292);
+  /* background-image: url("https://i.imgur.com/aQhQbMM.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat; */
+  padding: 20px;
+  color: white;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-info img {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  margin-right: 20px;
+}
+
+.user-details h4 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.user-details p {
+  margin: 5px 0 0;
+  font-size: 0.9rem;
+}
+
+.user-navigation {
+  background: #f4f4f4;
+  border-bottom: 1px solid #ddd;
+}
+
+.nav-tabs {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-tab {
+  flex: 1;
+  text-align: center;
+  padding: 20px;
+  cursor: pointer;
+  background: #f4f4f4;
+  transition: background 0.3s;
+}
+
+.nav-tab:hover,
+.nav-tab.active {
+  background: white;
+}
+
+.content-section {
+  padding: 20px;
+}
+
+.content-section.hidden {
+  display: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  background: #f4f4f4;
+}
+
+
+.order-history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.order-card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.order-card .order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.order-card .order-header h5 {
+  margin: 0;
+  font-size: small;
+  color: #333;
+}
+
+.order-card .order-header .status {
+  padding: 5px 10px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.order-card .status.shipped {
+  background-color: #4caf50;
+}
+
+.order-card .status.pending {
+  background-color: #ff9800;
+}
+
+.order-card .status.cancelled {
+  background-color: #f44336;
+}
+
+.order-details {
+  margin: 10px 0;
+  font-size: small;
+  color: #555;
+}
+
+.order-details span {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.order-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.order-actions button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.3s ease;
+}
+
+.order-actions .btn-view {
+  background: #000000;
+  color: white;
+}
+
+.order-actions .btn-view:hover {
+  background: #000000b0;
+}
+
+.order-actions .btn-cancel {
+  background: #818181;
+  color: white;
+}
+
+.order-actions .btn-cancel:hover {
+  background: #d32f2f88;
+}
+
+.order-search {
+  margin-bottom: 20px;
+}
+
+#search-order {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

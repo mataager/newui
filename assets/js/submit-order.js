@@ -1,4 +1,3 @@
-
 const firebaseConfig = {
   apiKey: "AIzaSyDss53pHibCpqo87_1bhoUHkf8Idnj-Fig",
   authDomain: "matager-f1f00.firebaseapp.com",
@@ -41,251 +40,156 @@ async function submitOrder() {
   document.getElementById("preloader").classList.remove("hidden");
 
   try {
-    // Get the current authenticated user
+    // Ensure the user is signed in and fetch their token
     const user = firebase.auth().currentUser;
-
     if (!user) {
-      // If the user is not authenticated, hide preloader and show sign-in prompt
       document.getElementById("preloader").classList.add("hidden");
       Swal.fire({
         icon: "warning",
         title: "Sign In Required",
-        html: `
-          <div class="flex flex-direction-column align-items">
-            <p>You need to sign in to complete your order.</p>
-            <button id="google-sign-in" class="swal2-confirm swal2-styled mt-10 flex align-items" style="background-color: #4285F4; color: white;"><i class="bi bi-google mr-5"></i> Sign in with Google</button>
-            <button id="email-sign-in" class="swal2-confirm swal2-styled mt-10  flex align-items" style="background-color: #4285F4; color: white;"><i class="bi bi-envelope-fill mr-5"></i> sign in with email & password</button>
-            <p><a href="./account.html" class="mt-10" style="color: #4285F4; text-decoration: underline;">Go to your account</a></p>
-          </div>
-        `,
-        showConfirmButton: false,
-        didOpen: () => {
-          document
-            .getElementById("google-sign-in")
-            .addEventListener("click", googleSignIn);
-          document
-            .getElementById("email-sign-in")
-            .addEventListener("click", emailPasswordSignIn);
-        },
-      });
-
-      // Handle Google sign-in
-      document
-        .getElementById("google-sign-in")
-        .addEventListener("click", () => {
-          const provider = new firebase.auth.GoogleAuthProvider();
-          firebase
-            .auth()
-            .signInWithPopup(provider)
-            .then((result) => {
-              Swal.fire({
-                icon: "success",
-                title: "Signed in successfully!",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-            })
-            .catch((error) => {
-              console.error("Error signing in:", error);
-              Swal.fire({
-                icon: "error",
-                title: "Sign In Failed",
-                text: "There was a problem signing you in. Please try again!",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-            });
-        });
-
-      return; // Stop the process if the user is not authenticated
-    }
-
-    
-    // Email and Password Sign-In Prompt
-    function emailPasswordSignIn() {
-      Swal.fire({
-        title: "Sign in with Email & Password",
-        html: `
-      <input type="email" id="email" class="swal2-input" placeholder="Enter your email">
-      <input type="password" id="password" class="swal2-input" placeholder="Enter your password">
-    `,
+        text: "You must sign in to complete your order.",
         showCancelButton: true,
-        confirmButtonText: "Sign In",
-        preConfirm: () => {
-          const email = Swal.getPopup().querySelector("#email").value;
-          const password = Swal.getPopup().querySelector("#password").value;
-
-          if (!email || !password) {
-            Swal.showValidationMessage("Please enter both email and password");
-            return false;
-          }
-          return { email, password };
-        },
+        confirmButtonText: "Go to Account",
+        cancelButtonText: "Cancel",
+        reverseButtons: true,
       }).then((result) => {
         if (result.isConfirmed) {
-          const { email, password } = result.value;
-          auth
-            .signInWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-              Swal.fire({
-                icon: "success",
-                title: "Signed In Successfully",
-                text: `Welcome, ${userCredential.user.email}`,
-              });
-            })
-            .catch((error) => {
-              Swal.fire({
-                icon: "error",
-                title: "Sign In Failed",
-                text: error.message,
-              });
-            });
+          window.location.href = "./account.html"; // Redirect to the account page
         }
       });
-    }
-
-    //
-
-    // Get the user's auth token
-    const idToken = await user.getIdToken();
-
-    // Check product availability first
-    const isAvailable = await checkAvailability();
-    if (!isAvailable) {
-      document.getElementById("preloader").classList.add("hidden");
       return;
     }
 
-    // Retrieve cart data, personal info, and shipping fees from local storage
-    let cart = JSON.parse(localStorage.getItem("cart"));
-    let personal_info = JSON.parse(localStorage.getItem("personal_info"));
-    let shippingFees = document
-      .getElementById("shipping-fees-total")
-      .innerText.replace(" EGP", "");
+    const idToken = await user.getIdToken();
 
-    // Create the order object
-    let order = {
-      cart: cart,
-      personal_info: personal_info,
-      email:user.email,
-      shippingFees: parseFloat(shippingFees),
+    // Get the cart from local storage
+    let cart = JSON.parse(localStorage.getItem("cart"));
+    if (!cart || cart.length === 0) {
+      document.getElementById("preloader").classList.add("hidden");
+      Swal.fire({
+        icon: "warning",
+        title: "Your cart is empty",
+        text: "Please add items to your cart before placing an order.",
+      });
+      return;
+    }
+
+    // Check cart total and adjust shipping fees
+    const freeshipping = 2000; // Free shipping threshold
+    const cartTotalElement = document.getElementById("cart-total");
+    let cartTotal = 0;
+
+    if (cartTotalElement) {
+      const cartTotalText = cartTotalElement.innerText.match(/\d+/)
+        ? cartTotalElement.innerText.match(/\d+/)[0]
+        : "0";
+      cartTotal = parseInt(cartTotalText, 10);
+    }
+
+    // If the cart total exceeds the freeshipping threshold, update shipping fees
+    if (cartTotal >= freeshipping) {
+      localStorage.setItem("shippingFees", "0");
+      document.getElementById("shipping-fees").innerText = "Free Shipping";
+      document.getElementById("shipping-fees-total").innerText = "0 EGP";
+    }
+
+    const unavailableItems = [];
+    const updatedCart = [];
+
+    for (const item of cart) {
+      // Fetch the product data from Firebase
+      const productResponse = await fetch(
+        `${url}/Stores/${uid}/Products/${item.id}.json?auth=${idToken}`
+      );
+      const productData = await productResponse.json();
+
+      if (!productData) {
+        unavailableItems.push({
+          title: item.title,
+          photourl: item.photourl,
+          reason: "Product no longer exists in the store.",
+        });
+        continue;
+      }
+
+      const stockQty =
+        productData.sizes[item.productSize]?.[item.productColor]?.qty || 0;
+
+      if (stockQty < item.quantity) {
+        unavailableItems.push({
+          title: item.title,
+          photourl: item.photourl,
+          reason: `Requested quantity (${item.quantity}) exceeds available stock (${stockQty}).`,
+        });
+        continue;
+      }
+
+      // Update the stock in Firebase
+      const newStockQty = stockQty - item.quantity;
+
+      if (newStockQty > 0) {
+        await fetch(
+          `${url}/Stores/${uid}/Products/${item.id}/sizes/${item.productSize}/${item.productColor}.json?auth=${idToken}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ qty: newStockQty }),
+          }
+        );
+      } else {
+        // Delete the size/color if stock is depleted
+        await fetch(
+          `${url}/Stores/${uid}/Products/${item.id}/sizes/${item.productSize}/${item.productColor}.json?auth=${idToken}`,
+          {
+            method: "DELETE",
+          }
+        );
+      }
+
+      updatedCart.push(item);
+    }
+
+    if (unavailableItems.length > 0) {
+      document.getElementById("preloader").classList.add("hidden");
+
+      const unavailableList = unavailableItems
+        .map(
+          (item) =>
+            `<li>
+              <img src="${item.photourl}" alt="${item.title}" style="width: 50px; height: 50px; margin-right: 10px;">
+              <strong>${item.title}</strong> - ${item.reason}
+            </li>`
+        )
+        .join("");
+
+      Swal.fire({
+        icon: "warning",
+        title: "Some items are unavailable",
+        html: `<ul>${unavailableList}</ul>`,
+      }).then(() => {
+        location.reload();
+      });
+
+      return;
+    }
+
+    // Get personal information and shipping fees
+    const personalInfo = JSON.parse(localStorage.getItem("personal_info"));
+    let shippingFees = parseFloat(
+      document
+        .getElementById("shipping-fees-total")
+        .innerText.replace(" EGP", "")
+    );
+
+    // Construct the order
+    const order = {
+      cart: updatedCart,
+      personal_info: personalInfo,
+      email: user.email,
+      shippingFees,
     };
 
-    // Fetch products data
-    const response = await fetch(
-      `${url}/Stores/${uid}/Products.json?auth=${idToken}`
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch product data from Firebase");
-    }
-    let productsData = await response.json();
-
-    // Update product quantities
-    let productCounts = {};
-    cart.forEach((cartItem) => {
-      const key = `${cartItem.id}-${cartItem.productSize}-${cartItem.productColor}`;
-      if (!productCounts[key]) {
-        productCounts[key] = {
-          count: 0,
-          details: cartItem,
-        };
-      }
-      productCounts[key].count += 1;
-    });
-
-    let updatePromises = [];
-
-    // Update quantities or delete products
-    for (const key in productCounts) {
-      const { count, details } = productCounts[key];
-      const productId = details.id;
-
-      if (
-        productsData[productId] &&
-        productsData[productId].sizes[details.productSize] &&
-        productsData[productId].sizes[details.productSize][details.productColor]
-      ) {
-        const productInfo =
-          productsData[productId].sizes[details.productSize][
-            details.productColor
-          ];
-        const newQty = productInfo.qty - count;
-
-        if (newQty > 0) {
-          // Update the quantity
-          updatePromises.push(
-            fetch(
-              `${url}/Stores/${uid}/Products/${productId}/sizes/${details.productSize}/${details.productColor}.json?auth=${idToken}`,
-              {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ qty: newQty }),
-              }
-            )
-          );
-        } else {
-          // Remove the size/color node
-          updatePromises.push(
-            fetch(
-              `${url}/Stores/${uid}/Products/${productId}/sizes/${details.productSize}/${details.productColor}.json?auth=${idToken}`,
-              {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-              }
-            )
-          );
-        }
-      }
-    }
-
-    // Wait for all updates
-    await Promise.all(updatePromises);
-
-    // Fetch updated product data to check for empty sizes nodes
-    const updatedResponse = await fetch(
-      `${url}/Stores/${uid}/Products.json?auth=${idToken}`
-    );
-    if (!updatedResponse.ok) {
-      throw new Error("Failed to fetch updated product data from Firebase");
-    }
-    let updatedProductsData = await updatedResponse.json();
-
-    // Check for products with empty sizes nodes and delete them
-    let deleteProductPromises = [];
-    let processedProductIds = new Set();
-
-    for (const key in productCounts) {
-      const { details } = productCounts[key];
-      const productId = details.id;
-
-      if (
-        !processedProductIds.has(productId) &&
-        updatedProductsData[productId]
-      ) {
-        processedProductIds.add(productId);
-
-        if (
-          !updatedProductsData[productId].sizes ||
-          Object.keys(updatedProductsData[productId].sizes).length === 0
-        ) {
-          // Delete the product
-          deleteProductPromises.push(
-            fetch(
-              `${url}/Stores/${uid}/Products/${productId}.json?auth=${idToken}`,
-              {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-              }
-            )
-          );
-        }
-      }
-    }
-
-    // Wait for all deletes
-    await Promise.all(deleteProductPromises);
-
-    // Send the order to the server
+    // Submit the order to Firebase
     const orderResponse = await fetch(
       `${url}/Stores/${uid}/orders.json?auth=${idToken}`,
       {
@@ -294,15 +198,15 @@ async function submitOrder() {
         body: JSON.stringify(order),
       }
     );
+
     if (!orderResponse.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error("Failed to submit order");
     }
 
-    // Clear the cart and hide the preloader
+    // Clear the cart
     localStorage.removeItem("cart");
     document.getElementById("preloader").classList.add("hidden");
 
-    // Show success message and redirect
     Swal.fire({
       icon: "success",
       title: "Order submitted successfully!",
@@ -312,19 +216,12 @@ async function submitOrder() {
       window.location.href = "./index.html";
     });
   } catch (error) {
-    console.error(
-      "Error updating product quantities or submitting order:",
-      error
-    );
-
-    // Hide preloader and show error message
+    console.error("Error during order submission:", error);
     document.getElementById("preloader").classList.add("hidden");
     Swal.fire({
       icon: "error",
       title: "Error",
-      text: "An error occurred while processing your order. Please try again soon!",
-      showConfirmButton: false,
-      timer: 1500,
+      text: "An error occurred while processing your order. Please try again.",
     });
   }
 }

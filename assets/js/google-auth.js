@@ -1,5 +1,3 @@
-
-
 // Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDss53pHibCpqo87_1bhoUHkf8Idnj-Fig",
@@ -85,7 +83,7 @@ function updateUI(user) {
     }`;
     document.getElementById("user-email").innerText = `${user.email}`;
     document.getElementById("user-photo").src =
-      user.photoURL || "https://via.placeholder.com/100";
+      user.photoURL || "https://i.imgur.com/Zaneuop.png";
   } else {
     // Hide user info and show the sign-in button
     document.getElementById("google-signin-btn").style.display = "block";

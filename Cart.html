@@ -813,6 +813,7 @@
                     </button>
                 </div>
                 <script>
+
                     function updateCartSummary() {
                         // Retrieve cart items from localStorage
                         let cart = localStorage.getItem('cart');
@@ -828,62 +829,29 @@
                             // Iterate through cart items and sum up the prices
                             cart.forEach(item => {
                                 // Extract the numeric value from the price string and convert it to a number
-                                let price = parseFloat(item.price.replace(' EGP', '')) || 0; // Handle invalid prices gracefully
-                                let quantity = parseInt(item.quantity) || 1; // Default to 1 if quantity is missing or invalid
+                                let price = parseFloat(item.price.replace(' EGP', '')); // Convert price to number
+                                let quantity = parseInt(item.quantity) || 1; // Get quantity, default to 1 if not available
 
                                 // Add the product of price and quantity to the total price
                                 totalPrice += price * quantity;
                             });
 
                             // Update the cart total element in the DOM
-                            document.getElementById('cart-total').innerText = `${totalPrice.toFixed(2)} EGP`;
+                            document.getElementById('cart-total').innerText = `${totalPrice} EGP`;
 
                             // Retrieve the shipping fees from the DOM and convert it to a number
                             let shippingFees = parseFloat(document.getElementById('shipping-fees-total').innerText) || 0;
 
-                            // Calculate the final price
+                            // Calculate the final price (cart total + shipping fees)
                             let finalPrice = totalPrice + shippingFees;
 
                             // Update the total price element in the DOM
-                            document.getElementById('total-price').innerText = `${finalPrice.toFixed(2)} EGP`;
+                            document.getElementById('total-price').innerText = `${finalPrice} EGP`;
                         }
                     }
 
-
-                    // function updateCartSummary() {
-                    //     // Retrieve cart items from localStorage
-                    //     let cart = localStorage.getItem('cart');
-
-                    //     // Check if the cart is not empty
-                    //     if (cart) {
-                    //         // Parse the JSON string into an array
-                    //         cart = JSON.parse(cart);
-
-                    //         // Initialize total price
-                    //         let totalPrice = 0;
-
-                    //         // Iterate through cart items and sum up the prices
-                    //         cart.forEach(item => {
-                    //             // Extract the numeric value from the price string and convert it to a number
-                    //             let price = parseFloat(item.price.replace(' EGP', ''));
-                    //             totalPrice += price;
-                    //         });
-
-                    //         // Update the cart total element in the DOM
-                    //         document.getElementById('cart-total').innerText = `${totalPrice} EGP`;
-
-                    //         // Retrieve the shipping fees from the DOM and convert it to a number
-                    //         let shippingFees = parseFloat(document.getElementById('shipping-fees-total').innerText);
-
-                    //         // Calculate the final price
-                    //         let finalPrice = totalPrice + shippingFees;
-
-                    //         // Update the total price element in the DOM
-                    //         document.getElementById('total-price').innerText = `${finalPrice} EGP`;
-                    //     }
-                    // }
-
                     // Function to observe changes in the shipping fees element
+
                     function observeShippingFees() {
                         const shippingFeesElement = document.getElementById('shipping-fees-total');
                         const observer = new MutationObserver(updateCartSummary);
