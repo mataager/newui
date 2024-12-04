@@ -19,7 +19,6 @@ provider.setCustomParameters({
   login_hint: "user@example.com",
 });
 
-
 // //v1
 // // Sign in with Google (popup method)
 // document.getElementById("google-signin-btn").addEventListener("click", () => {
@@ -95,7 +94,6 @@ provider.setCustomParameters({
 // }
 
 // //
-
 
 // v2
 document.getElementById("google-signin-btn").addEventListener("click", () => {
@@ -182,33 +180,101 @@ auth.onAuthStateChanged((user) => {
 
 // Helper function to update UI based on auth state
 // Helper function to update UI based on auth state
+// function updateUI(user) {
+//   // Show the preloader initially
+//   document.getElementById("preloader").style.display = "flex";
+
+//   // Automatically hide the preloader after 1.5 seconds
+//   setTimeout(() => {
+//     document.getElementById("preloader").style.display = "none";
+//   }, 1500);
+
+//   if (user) {
+//     // Show user info
+//     document.getElementById("google-signin-btn").style.display = "none";
+//     document.getElementById("signout-btn").style.display = "block";
+
+//     // Update user info (name, email, photo)
+//     document.getElementById("user-info").style.display = "block";
+//     document.getElementById("user-name").innerText = `${
+//       user.username || "No Name"
+//     }`;
+//     document.getElementById("user-email").innerText = `${user.email}`;
+//     document.getElementById("user-photo").src =
+//       user.photoURL || "https://i.imgur.com/Zaneuop.png";
+//   } else {
+//     // Hide user info and show the sign-in button
+//     document.getElementById("google-signin-btn").style.display = "block";
+//     document.getElementById("signout-btn").style.display = "none";
+//     document.getElementById("user-info").style.display = "none";
+//   }
+// }
 function updateUI(user) {
   // Show the preloader initially
   document.getElementById("preloader").style.display = "flex";
 
-  // Automatically hide the preloader after 1.5 seconds
-  setTimeout(() => {
-    document.getElementById("preloader").style.display = "none";
-  }, 1500);
-
   if (user) {
-    // Show user info
-    document.getElementById("google-signin-btn").style.display = "none";
-    document.getElementById("signout-btn").style.display = "block";
+    const uid = user.uid; // Get the authenticated user's UID
+    const url = `https://matager-f1f00-default-rtdb.firebaseio.com/users/${uid}/personalInfo.json`;
 
-    // Update user info (name, email, photo)
-    document.getElementById("user-info").style.display = "block";
-    document.getElementById("user-name").innerText = `${
-      user.displayName || "No Name"
-    }`;
-    document.getElementById("user-email").innerText = `${user.email}`;
-    document.getElementById("user-photo").src =
-      user.photoURL || "https://i.imgur.com/Zaneuop.png";
+    // Fetch additional user data from the Realtime Database
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            "Failed to fetch additional user data from the database."
+          );
+        }
+        return response.json();
+      })
+      .then((personalInfo) => {
+        // Combine data from both sources
+        const displayName =
+          user.displayName || personalInfo.displayName || "No Display Name";
+        const email = user.email || "No Email";
+        const username = personalInfo.username || "No Username";
+        const photoURL =
+          personalInfo.photoURL ||
+          user.photoURL ||
+          "https://i.imgur.com/Zaneuop.png";
+        const phone = personalInfo.phone || "No Phone Number";
+
+        // Hide the preloader once data is fetched
+        document.getElementById("preloader").style.display = "none";
+
+        // Update the UI with the user data
+        document.getElementById("google-signin-btn").style.display = "none";
+        document.getElementById("signout-btn").style.display = "block";
+        document.getElementById("user-info").style.display = "block";
+
+        // Populate user information
+        document.getElementById("user-name").innerText = username;
+        document.getElementById(
+          "user-email"
+        ).innerHTML = `<i class="bi bi-envelope-fill mr-5"></i>  ${email}`;
+        // document.getElementById("user-phone").innerText = phone;
+        document.getElementById("user-photo").src = photoURL;
+      })
+      .catch((error) => {
+        console.error(error);
+
+        // Hide the preloader even if there's an error
+        document.getElementById("preloader").style.display = "none";
+
+        // Optionally show an error message to the user
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Could not fetch additional user information.",
+        });
+      });
   } else {
-    // Hide user info and show the sign-in button
+    // If no user is signed in, reset the UI
+    document.getElementById("preloader").style.display = "none"; // Ensure preloader hides if there's no user
     document.getElementById("google-signin-btn").style.display = "block";
     document.getElementById("signout-btn").style.display = "none";
     document.getElementById("user-info").style.display = "none";
   }
 }
+
 //

@@ -4102,3 +4102,99 @@ th {
   font-size: small;
   padding: 10px;
 }
+
+/*  */
+.content-section label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.content-section input {
+  font-size: 12px;
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#save-settings-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#save-settings-btn:hover {
+  background-color: #45a049;
+}
+
+/* account setting */
+
+
+.account-section {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: 0.5px solid #e7e7e7;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(231, 231, 231, 0.692);
+  /* Soft shadow with #e7e7e7 */
+
+}
+
+.account-section {
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.details-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.detail-group {
+  flex: 1;
+  padding: 0 10px;
+}
+
+.detail-group h6 {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
+  font-weight: normal;
+}
+
+.detail-group p {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+}
+
+
+
+.edit-button {
+  padding: 8px 16px;
+  color: #838383;
+  border: 1px solid #ededed;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.3s ease;
+}
+
+.edit-button:hover {
+  background: #000000b0;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+/* account setting */
