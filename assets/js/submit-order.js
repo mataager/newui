@@ -10,31 +10,34 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+//
+// async function googleSignIn() {
+//   const provider = new firebase.auth.GoogleAuthProvider();
+//   try {
+//     const result = await firebase.auth().signInWithPopup(provider);
+//     Swal.fire({
+//       icon: "success",
+//       title: "Signed in successfully!",
+//       showConfirmButton: false,
+//       timer: 1500, // Close the alert after 1.5 seconds
+//     });
+//     return result.user;
+//   } catch (error) {
+//     console.error("Error signing in:", error);
+//     Swal.fire({
+//       icon: "error",
+//       title: "Sign In Failed",
+//       text: "There was a problem signing you in. Please try again!",
+//       showConfirmButton: false,
+//       timer: 1500, // Close the alert after 1.5 seconds
+//     });
+//     return null;
+//   }
+// }
+//
 
-async function googleSignIn() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  try {
-    const result = await firebase.auth().signInWithPopup(provider);
-    Swal.fire({
-      icon: "success",
-      title: "Signed in successfully!",
-      showConfirmButton: false,
-      timer: 1500, // Close the alert after 1.5 seconds
-    });
-    return result.user;
-  } catch (error) {
-    console.error("Error signing in:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Sign In Failed",
-      text: "There was a problem signing you in. Please try again!",
-      showConfirmButton: false,
-      timer: 1500, // Close the alert after 1.5 seconds
-    });
-    return null;
-  }
-}
-
+//main
+//
 async function submitOrder() {
   // Show the preloader
   document.getElementById("preloader").classList.remove("hidden");
@@ -61,7 +64,7 @@ async function submitOrder() {
     }
 
     const idToken = await user.getIdToken();
-
+    const Customeruid = user.uid; // Fetch the UID of the logged-in user
     // Get the cart from local storage
     let cart = JSON.parse(localStorage.getItem("cart"));
     if (!cart || cart.length === 0) {
@@ -74,8 +77,6 @@ async function submitOrder() {
       return;
     }
 
-    // Check cart total and adjust shipping fees
-    const freeshipping = 2000; // Free shipping threshold
     const cartTotalElement = document.getElementById("cart-total");
     let cartTotal = 0;
 
@@ -84,13 +85,6 @@ async function submitOrder() {
         ? cartTotalElement.innerText.match(/\d+/)[0]
         : "0";
       cartTotal = parseInt(cartTotalText, 10);
-    }
-
-    // If the cart total exceeds the freeshipping threshold, update shipping fees
-    if (cartTotal >= freeshipping) {
-      localStorage.setItem("shippingFees", "0");
-      document.getElementById("shipping-fees").innerText = "Free Shipping";
-      document.getElementById("shipping-fees-total").innerText = "0 EGP";
     }
 
     const unavailableItems = [];
@@ -174,18 +168,13 @@ async function submitOrder() {
     }
 
     // Get personal information and shipping fees
-    const personalInfo = JSON.parse(localStorage.getItem("personal_info"));
-    let shippingFees = parseFloat(
-      document
-        .getElementById("shipping-fees-total")
-        .innerText.replace(" EGP", "")
-    );
+    const personalInfo = await getPersonalInfo(Customeruid, idToken);
+    const shippingFees = parseFloat(localStorage.getItem("shippingFees")) || 0;
 
     // Construct the order
     const order = {
       cart: updatedCart,
       personal_info: personalInfo,
-      email: user.email,
       shippingFees,
     };
 
@@ -207,6 +196,8 @@ async function submitOrder() {
     localStorage.removeItem("cart");
     document.getElementById("preloader").classList.add("hidden");
 
+    await addOrderToCustomerHistory(Customeruid, idToken, order);
+
     Swal.fire({
       icon: "success",
       title: "Order submitted successfully!",
@@ -223,5 +214,73 @@ async function submitOrder() {
       title: "Error",
       text: "An error occurred while processing your order. Please try again.",
     });
+  }
+}
+
+async function getPersonalInfo(Customeruid, idToken) {
+  try {
+    // Fetch personal info from Firebase
+    const response = await fetch(
+      `https://matager-f1f00-default-rtdb.firebaseio.com/users/${Customeruid}/personalInfo.json?auth=${idToken}`
+    );
+    const data = await response.json();
+
+    if (!data) {
+      throw new Error("Failed to fetch personal information.");
+    }
+
+    // Extract personal info key and details
+    const personalInfoKey = Object.keys(data)[0];
+    const personalInfo = data[personalInfoKey];
+
+    const name = `${personalInfo.firstName} ${personalInfo.lastName}`;
+    const { email, phone, phone2 } = personalInfo;
+
+    // Retrieve address, city, payment, and shipping fees from local storage
+    const address = localStorage.getItem("Address") || "N/A";
+    const city = localStorage.getItem("City") || "N/A";
+    const payment = localStorage.getItem("Payment") || "N/A";
+    const shippingFees = parseFloat(localStorage.getItem("shippingFees")) || 0;
+
+    // Combine all information into a single object
+    return { name, email, phone, phone2, address, city, payment, shippingFees };
+  } catch (error) {
+    console.error("Error fetching personal information:", error);
+    throw error;
+  }
+}
+
+async function addOrderToCustomerHistory(Customeruid, idToken, order) {
+  try {
+    // Use `push()` to generate a random unique key automatically
+    const saveResponse = await fetch(
+      `https://matager-f1f00-default-rtdb.firebaseio.com/users/${Customeruid}/orderHistory.json?auth=${idToken}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          order: order.cart.map((item) => ({
+            id: item.id,
+            brand: item.brand,
+            title: item.title,
+            photo: item.photourl,
+            price: item.price,
+            qty: item.quantity,
+            size: item.productSize,
+            color: item.productColor,
+          })),
+          progress: "Pending", // Add progress with a default value of "Pending"
+        }),
+      }
+    );
+
+    if (!saveResponse.ok) throw new Error("Order history couldn't save");
+
+    console.log("Order history added successfully");
+  } catch (error) {
+    console.error("Error updating order history:", error);
   }
 }

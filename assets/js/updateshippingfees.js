@@ -1,55 +1,115 @@
-function updateShippingFees() {
-  // Define the free shipping threshold
+function handleAddressClick(city, fullAddress) {
+  // Save selected city to localStorage
+  localStorage.setItem("City", city);
+  // Save the full address to localStorage
+  localStorage.setItem("Address", fullAddress);
 
-  // Get the cart total element and its text content
-  const cartTotalElement = document.getElementById("cart-total");
-  let totalAmount = 0;
+  // Trigger the shipping logic
+  updateShippingFees();
 
-  // Extract the numerical value from the cart total
-  if (cartTotalElement) {
-    const totalText = cartTotalElement.innerText.replace(" EGP", "").trim();
-    totalAmount = parseFloat(totalText) || 0; // Convert to number, default to 0 if not valid
-  }
-
-  // Get the city element and its value
-  const cityElement = document.getElementById("city");
-  let city = "Not selected yet";
-  if (cityElement) {
-    city = cityElement.value || "Not selected yet";
-  }
-
-  // Set default shipping fee based on the city
-  let shippingFees = 100; // Default shipping fee for cities not listed
-  if (city === "Cairo" || city === "Giza" || city === "Alexandria") {
-    shippingFees = 65;
-  }
-
-  // Check if the total amount exceeds the free shipping threshold
-  if (totalAmount >= freeshipping) {
-    // If total amount is above the threshold, set shipping fees to 0
-    document.getElementById("shipping-fees").innerText = "Free shipping";
-    document.getElementById("shipping-fees-total").innerText = "0 EGP"; // Update summary shipping fees
-    // Store the shipping fees in localStorage
-    localStorage.setItem("shippingFees", "0");
-  } else {
-    // If total amount is below the threshold, apply regular shipping fees
-    document.getElementById("shipping-fees").innerText = `${shippingFees} EGP`;
-    document.getElementById(
-      "shipping-fees-total"
-    ).innerText = `${shippingFees} EGP`; // Update summary shipping fees
-    // Store the shipping fees in localStorage
-    localStorage.setItem("shippingFees", shippingFees.toString());
-  }
-
-  // Update the cart summary
-  updateCartSummary();
+  // Highlight the clicked card and remove border from others
+  highlightSelectedCard();
 }
 
-// Call the function when the page loads
-document.addEventListener("DOMContentLoaded", updateShippingFees);
+function highlightSelectedCard() {
+  const addressCards = document.querySelectorAll(".address-card"); // Select all address cards
 
-// Call the function when the city select changes, if the element exists
-const cityElement = document.getElementById("city");
-if (cityElement) {
-  cityElement.addEventListener("change", updateShippingFees);
+  // Remove the border from all other cards
+  addressCards.forEach((card) => {
+    card.style.border = ""; // Clear the border
+  });
+
+  // Add border to the clicked card
+  const clickedCard = event.currentTarget;
+  clickedCard.style.border = "2px solid #838383";
+}
+
+function updateShippingFees() {
+  const shippingFeesElement = document.getElementById("shipping-fees"); // Get the shipping fees element
+  const shippingFeesElementtotal = document.getElementById(
+    "shipping-fees-total"
+  );
+  const cartTotalElement = document.getElementById("cart-total");
+  const totalCartAmountElement = document.getElementById("total-cart-amount");
+  const savedCity = localStorage.getItem("City"); // Retrieve the saved city from localStorage
+
+  // Parse cart total and total cart amount
+  const cartTotal = cartTotalElement
+    ? parseFloat(cartTotalElement.innerText) || 0
+    : 0;
+  const totalCartAmount = totalCartAmountElement
+    ? parseFloat(totalCartAmountElement.innerText) || 0
+    : 0;
+
+  // Check if free shipping threshold is met
+  if (cartTotal > freeshipping || totalCartAmount > freeshipping) {
+    if (shippingFeesElement) shippingFeesElement.innerText = "0 EGP";
+    if (shippingFeesElementtotal) shippingFeesElementtotal.innerText = "0 EGP";
+    localStorage.setItem("shippingFees", "0");
+    return; // Exit early since no further calculation is needed
+  }
+
+  // If free shipping is not applicable, use the old logic
+  if (shippingFeesElement) {
+    if (savedCity) {
+      if (["Cairo", "Giza", "Alexandria"].includes(savedCity)) {
+        shippingFeesElement.innerText = "65 EGP";
+        shippingFeesElementtotal.innerText = "65 EGP";
+        localStorage.setItem("shippingFees", "65");
+      } else {
+        shippingFeesElement.innerText = "100 EGP";
+        shippingFeesElementtotal.innerText = "100 EGP";
+        localStorage.setItem("shippingFees", "100");
+      }
+    } else {
+      console.log("Saved City from localStorage:", savedCity);
+    }
+  }
+}
+
+// Ensure this runs on DOM ready
+document.addEventListener("DOMContentLoaded", function () {
+  updateShippingFees(); // Ensure the initial logic sets up the UI
+});
+
+function calculateCartTotal(cartItems) {
+  return cartItems.reduce((total, item) => {
+    const price = parseFloat(item.price.replace(" EGP", "").trim()) || 0;
+    return total + price * item.quantity;
+  }, 0);
+}
+
+// Function to dynamically calculate & append the shipping fees div
+function appendShippingFeeDiv(city, cartItems) {
+  const freeShippingThreshold = 200; // Free shipping threshold
+  const cartTotal = calculateCartTotal(cartItems); // Calculate cart total dynamically
+
+  let shippingFees = 100; // Default shipping fee
+  if (["Cairo", "Giza", "Alexandria"].includes(city)) {
+    shippingFees = 65; // Discounted shipping fee for specific cities
+  }
+
+  // Logic for free shipping based on cart amount
+  if (cartTotal >= freeShippingThreshold) {
+    shippingFees = 0; // Free shipping
+  }
+
+  // Update or create shipping fees container
+  let shippingFeesContainer = document.getElementById(
+    "shipping-fees-container"
+  );
+  if (!shippingFeesContainer) {
+    shippingFeesContainer = document.createElement("div");
+    shippingFeesContainer.id = "shipping-fees-container";
+    document.body.appendChild(shippingFeesContainer);
+  }
+
+  // Clear and update content
+  shippingFeesContainer.innerHTML = `
+    <p>Cart Total: ${cartTotal.toFixed(2)} EGP</p>
+    <p>Shipping Fees: ${shippingFees.toFixed(2)} EGP</p>
+  `;
+
+  console.log(`Cart Total: ${cartTotal.toFixed(2)} EGP`);
+  console.log(`Shipping Fee: ${shippingFees.toFixed(2)} EGP`);
 }

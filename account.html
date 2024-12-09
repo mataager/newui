@@ -214,7 +214,7 @@
         <div id="user-info" style="display: none;" class="user-dashboard">
             <div class="user-header">
                 <div class="user-info flex">
-                    <img id="user-photo" src="" alt="https://i.imgur.com/Zaneuop.png">
+                    <img class="wb-2px" id="user-photo" src="" alt="https://i.imgur.com/Zaneuop.png">
                     <div class="user-details">
                         <h4 id="user-name"></h4>
                         <p class="flex" id="user-email"></p>
@@ -273,27 +273,35 @@
             <div class="content-section  hidden" id="account-settings">
                 <div class="account-section">
                     <div class="flex align-items justify-content-space-between mb-10">
-                        <h5>Personal Information</h5><button class="edit-button" onclick="editPersonalInfo()"><i
-                                class="bi bi-pencil"></i> Edit</button>
+                        <h5>Personal Information</h5>
+                        <div class="flex flex-direction-column align-items-flex-end ">
+                            <button class="edit-button mb-10" onclick="editPersonalInfo()"><i
+                                    class="bi bi-pencil-square"></i></button>
+
+                            <button class="edit-button hidden" id="savepersonalinfochanges"
+                                onclick="savepersonalinfochanges()">
+                                save changes</button>
+
+                        </div>
                     </div>
                     <div class="details-row">
                         <div class="detail-group">
                             <h6>Email Address</h6>
-                            <p id="email-address">jackadams@gmail.com</p>
+                            <p id="email-address"></p>
                         </div>
                         <div class="detail-group">
                             <h6>Role</h6>
-                            <p id="role">customer</p>
+                            <p id="role"></p>
                         </div>
                     </div>
                     <div class="details-row">
                         <div class="detail-group">
                             <h6>First Name</h6>
-                            <p id="first-name">Jack</p>
+                            <p id="first-name"></p>
                         </div>
                         <div class="detail-group">
                             <h6>Last Name</h6>
-                            <p id="last-name">Adams</p>
+                            <p id="last-name"></p>
                         </div>
                     </div>
 
@@ -301,84 +309,28 @@
 
                         <div class="detail-group">
                             <h6>Phone</h6>
-                            <p id="phone-number">(+20) 1010 7735 87</p>
+                            <p id="phone-number"></p>
                         </div>
                         <div class="detail-group">
                             <h6>Phone-2</h6>
-                            <p id="phone-number2">(+20) 1220 5674 00</p>
+                            <p id="phone-number2"></p>
                         </div>
                     </div>
-
-
-
 
                 </div>
 
-                <div class="account-section">
-                    <div class="flex align-items justify-content-space-between mb-10">
-                        <h5>Address</h5><button class="edit-button" onclick="editAddress()"><i class="bi bi-pencil"></i>
-                            Edit</button>
-                    </div>
+                <h3 class="mt-50 mb-10 flex center">Address Information</h3>
 
-                    <div class="details-row">
-                        <div class="detail-group">
-                            <h6>Governorate</h6>
-                            <p id="Governorate">Sharqia</p>
-                        </div>
-                        <div class="detail-group">
-                            <h6>City/State</h6>
-                            <p id="city-state">Zagazig</p>
-                        </div>
-                    </div>
+                <div class="flex align-items center mb-10">
+                    <button class="edit-button" onclick="AddAddress()"><i class="bi bi-plus-circle"></i>
+                        Add Address</button>
+                </div>
+                <div class="addresses-container">
 
-                    <div class="details-row">
-                        <div class="detail-group">
-                            <h6>Area</h6>
-                            <p id="Area">Kawmia</p>
-                        </div>
-                        <div class="detail-group">
-                            <h6>House-Number</h6>
-                            <p id="house-num">22</p>
-                        </div>
-                    </div>
-                    <div class="details-row">
-                        <div class="detail-group">
-                            <h6>Address</h6>
-                            <p id="address">11 fardous street - tolba awida street - el kawmia - zagazig</p>
-                        </div>
-                    </div>
-
+                    <!-- address append here -->
                 </div>
             </div>
-            <script>
-                function editPersonalInfo() {
-                    // Example: Convert displayed info to editable inputs
-                    document.getElementById("first-name").outerHTML =
-                        '<input type="text" id="first-name" value="Jack">';
-                    document.getElementById("last-name").outerHTML =
-                        '<input type="text" id="last-name" value="Adams">';
-                    document.getElementById("phone-number").outerHTML =
-                        '<input type="tel" id="phone-number" value="(+20) 1010 7735 87">';
-                    document.getElementById("phone-number2").outerHTML =
-                        '<input type="tel" id="phone-number2" value="(+20) 1220 5674 00">';
-
-                }
-
-                function editAddress() {
-                    document.getElementById("Governorate").outerHTML =
-                        '<input type="text" id="Governorate" value="Sharqia">';
-                    document.getElementById("city-state").outerHTML =
-                        '<input type="text" id="city-state" value="Zagazig">';
-                    document.getElementById("Area").outerHTML =
-                        '<input type="text" id="Area" value="Kawmia">';
-                    document.getElementById("house-num").outerHTML =
-                        '<input type="text" id="house-num" value="22">';
-                    document.getElementById("address").outerHTML =
-                        '<input type="text" id="address" value="11 fardous street - tolba awida street - el kawmia - zagazig">';
-                }
-
-            </script>
-
+            <script src="./assets/js/account.js"></script>
 
             <div class="content-section hidden" id="favourite-items">
                 <h3>Favourite Items</h3>

@@ -51,244 +51,181 @@ function emailPasswordSignIn() {
   });
 }
 
-// Sign-Up Prompt
-// v1
-// function emailPasswordSignUp() {
-//   Swal.fire({
-//     title: "Create a New Account",
-//     html: `
-//       <input type="email" id="new-email" class="swal2-input" placeholder="Enter your email">
-//       <input type="password" id="new-password" class="swal2-input" placeholder="Enter your password">
-//       <input type="text" id="phone" class="swal2-input" placeholder="Enter your phone number (optional)">
-//       <input type="text" id="profile-pic" class="swal2-input" placeholder="Enter your profile picture URL (optional)">
-//     `,
-//     showCancelButton: true,
-//     confirmButtonText: "Sign Up",
-//     preConfirm: () => {
-//       const email = Swal.getPopup().querySelector("#new-email").value;
-//       const password = Swal.getPopup().querySelector("#new-password").value;
-//       const phone = Swal.getPopup().querySelector("#phone").value;
-//       const profilePic = Swal.getPopup().querySelector("#profile-pic").value;
-
-//       if (!email || !password) {
-//         Swal.showValidationMessage("Please enter both email and password");
-//         return false;
-//       }
-//       return { email, password, phone, profilePic };
-//     },
-//   }).then((result) => {
-//     if (result.isConfirmed) {
-//       const { email, password, phone, profilePic } = result.value;
-//       auth
-//         .createUserWithEmailAndPassword(email, password)
-//         .then((userCredential) => {
-//           // Set additional user information
-//           return userCredential.user
-//             .updateProfile({
-//               displayName: "Customer",
-//               photoURL: profilePic || undefined,
-//             })
-//             .then(() => {
-//               // Save additional info (e.g., phone) in database if needed
-//               const uid = userCredential.user.uid;
-//               const userData = {
-//                 email,
-//                 displayName: "Customer",
-//                 phone: phone || null,
-//                 photoURL: profilePic || null,
-//               };
-//               // return firebase.database().ref(`users/${uid}`).set(userData);
-//             });
-//         })
-//         .then(() => {
-//           Swal.fire({
-//             icon: "success",
-//             title: "Account Created Successfully",
-//             text: "Welcome! You can now signed in",
-//           });
-//         })
-//         .catch((error) => {
-//           Swal.fire({
-//             icon: "error",
-//             title: "Sign Up Failed",
-//             text: error.message,
-//           });
-//         });
-//     }
-//   });
-// }
-
-// v2
-// function emailPasswordSignUp() {
-//   Swal.fire({
-//     title: "Create a New Account",
-//     html: `
-//       <input type="email" id="new-email" class="swal2-input" placeholder="Enter your email">
-//       <input type="text" id="username" class="swal2-input" placeholder="Enter your name">
-//       <input type="password" id="new-password" class="swal2-input" placeholder="Enter your password">
-//       <input type="text" id="phone" class="swal2-input" placeholder="Enter your phone number (optional)">
-//       <input type="text" id="profile-pic" class="swal2-input" placeholder="Enter your profile picture URL (optional)">
-//     `,
-//     showCancelButton: true,
-//     confirmButtonText: "Sign Up",
-//     preConfirm: () => {
-//       const email = Swal.getPopup().querySelector("#new-email").value;
-//       const username = Swal.getPopup().querySelector("#username").value;
-//       const password = Swal.getPopup().querySelector("#new-password").value;
-//       const phone = Swal.getPopup().querySelector("#phone").value;
-//       const profilePic = Swal.getPopup().querySelector("#profile-pic").value;
-
-//       if (!email || !password || !username) {
-//         Swal.showValidationMessage("Please fill in all required fields");
-//         return false;
-//       }
-//       return { email, password, username, phone, profilePic };
-//     },
-//   }).then((result) => {
-//     if (result.isConfirmed) {
-//       const { email, password, username, phone, profilePic } = result.value;
-
-//       auth
-//         .createUserWithEmailAndPassword(email, password)
-//         .then((userCredential) => {
-//           const user = userCredential.user;
-
-//           // Set the display name to "Customer"
-//           return user
-//             .updateProfile({
-//               displayName: "Customer", // Auth display name
-//               photoURL: profilePic || null,
-//             })
-//             .then(() => user.getIdToken()) // Get ID token for secure database write
-//             .then((idToken) => ({ user, idToken }));
-//         })
-//         .then(({ user, idToken }) => {
-//           const userData = {
-//             personalInfo: {
-//               email: user.email,
-//               username: username, // User-provided name stored in the database
-//               displayName: "Customer", // Display name explicitly added to the database
-//               phone: phone || null,
-//               photoURL: profilePic || null,
-//             },
-//             orders: [],
-//             favorites: [],
-//           };
-
-//           const uid = user.uid;
-
-//           // Store user data in the Realtime Database
-//           return fetch(
-//             `https://matager-f1f00-default-rtdb.firebaseio.com/users/${uid}.json?auth=${idToken}`,
-//             {
-//               method: "PUT", // Ensure data is saved under the user's UID
-//               headers: {
-//                 "Content-Type": "application/json",
-//               },
-//               body: JSON.stringify(userData),
-//             }
-//           );
-//         })
-//         .then((response) => {
-//           if (!response.ok) {
-//             throw new Error("Failed to store user data in the database");
-//           }
-//           return Swal.fire({
-//             icon: "success",
-//             title: "Account Created Successfully",
-//             text: "Welcome! You are now signed in as Customer.",
-//           });
-//         })
-//         .catch((error) => {
-//           Swal.fire({
-//             icon: "error",
-//             title: "Sign Up Failed",
-//             text: error.message,
-//           });
-//         });
-//     }
-//   });
-// }
-
-//v3
 function emailPasswordSignUp() {
   Swal.fire({
     title: "Create a New Account",
-    html: `
-      <input type="email" id="new-email" class="swal2-input" placeholder="Enter your email">
-      <input type="text" id="username" class="swal2-input" placeholder="Enter your name">
-      <input type="password" id="new-password" class="swal2-input" placeholder="Enter your password">
-      <input type="text" id="phone" class="swal2-input" placeholder="Enter your phone number (optional)">
-      <input type="text" id="profile-pic" class="swal2-input" placeholder="Enter your profile picture URL (optional)">
-    `,
+    html: `<input type="email" id="new-email" class="swal2-input width-available" placeholder="Enter your email">
+      <input type="text" id="first-name" class="swal2-input width-available" placeholder="Enter your first name">
+      <input type="text" id="last-name" class="swal2-input width-available" placeholder="Enter your last name">
+      <input type="password" id="new-password" class="swal2-input width-available" placeholder="Enter your password">
+      <input type="text" id="phone" class="swal2-input width-available" placeholder="Enter your primary phone number">
+      <input type="text" id="phone2" class="swal2-input width-available" placeholder="Enter your secondary phone number (optional)">
+      <input type="text" id="profile-pic" class="swal2-input width-available" placeholder="Enter your profile picture URL (optional)">
+      <select id="governorate" class="swal2-input select-governorate width-available">
+        <option value="" disabled selected>Select your governorate</option>
+        <option value="Cairo">Cairo</option>
+        <option value="Giza">Giza</option>
+        <option value="Alexandria">Alexandria</option>
+        <option value="Port Said">Port Said</option>
+        <option value="Suez">Suez</option>
+        <option value="Damietta">Damietta</option>
+        <option value="Dakahlia">Dakahlia</option>
+        <option value="Sharqia">Sharqia</option>
+        <option value="Qalyubia">Qalyubia</option>
+        <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+        <option value="Gharbia">Gharbia</option>
+        <option value="Monufia">Monufia</option>
+        <option value="Beheira">Beheira</option>
+        <option value="Ismailia">Ismailia</option>
+        <option value="Aswan">Aswan</option>
+        <option value="Asyut">Asyut</option>
+        <option value="Beni Suef">Beni Suef</option>
+        <option value="Fayoum">Fayoum</option>
+        <option value="Minya">Minya</option>
+        <option value="Qena">Qena</option>
+        <option value="Sohag">Sohag</option>
+        <option value="Red Sea">Red Sea</option>
+        <option value="New Valley">New Valley</option>
+        <option value="Matruh">Matruh</option>
+        <option value="North Sinai">North Sinai</option>
+        <option value="South Sinai">South Sinai</option>
+        <option value="Luxor">Luxor</option>
+      </select>
+      <input type="text" id="city" class="swal2-input width-available" placeholder="Enter your city/state">
+      <input type="text" id="area" class="swal2-input width-available" placeholder="Enter your area">
+      <input type="text" id="house-number" class="swal2-input width-available" placeholder="Enter your house number">
+      <textarea id="address" class="swal2-textarea width-available" placeholder="Enter your full address"></textarea>
+    `, // The same HTML as before
     showCancelButton: true,
     confirmButtonText: "Sign Up",
     preConfirm: () => {
       const email = Swal.getPopup().querySelector("#new-email").value;
-      const username = Swal.getPopup().querySelector("#username").value;
+      const firstName = Swal.getPopup().querySelector("#first-name").value;
+      const lastName = Swal.getPopup().querySelector("#last-name").value;
       const password = Swal.getPopup().querySelector("#new-password").value;
       const phone = Swal.getPopup().querySelector("#phone").value;
+      const phone2 = Swal.getPopup().querySelector("#phone2").value;
       const profilePic = Swal.getPopup().querySelector("#profile-pic").value;
+      const governorate = Swal.getPopup().querySelector("#governorate").value;
+      const city = Swal.getPopup().querySelector("#city").value;
+      const area = Swal.getPopup().querySelector("#area").value;
+      const houseNumber = Swal.getPopup().querySelector("#house-number").value;
+      const fullAddress = Swal.getPopup().querySelector("#address").value;
 
-      if (!email || !password || !username) {
-        Swal.showValidationMessage("Please fill in all required fields");
+      if (
+        !email ||
+        !password ||
+        !firstName ||
+        !lastName ||
+        !phone ||
+        !governorate ||
+        !city ||
+        !area ||
+        !houseNumber ||
+        !fullAddress
+      ) {
+        Swal.showValidationMessage("Please fill in all required fields.");
         return false;
       }
-      return { email, password, username, phone, profilePic };
+      return {
+        email,
+        password,
+        firstName,
+        lastName,
+        phone,
+        phone2,
+        profilePic,
+        governorate,
+        city,
+        area,
+        houseNumber,
+        fullAddress,
+      };
     },
   }).then((result) => {
     if (result.isConfirmed) {
-      const { email, password, username, phone, profilePic } = result.value;
+      const {
+        email,
+        password,
+        firstName,
+        lastName,
+        phone,
+        phone2,
+        profilePic,
+        governorate,
+        city,
+        area,
+        houseNumber,
+        fullAddress,
+      } = result.value;
 
       auth
         .createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
           const user = userCredential.user;
 
-          // Set the display name to "Customer" in Firebase Authentication
+          // Update user profile with display name and photo
           return user
             .updateProfile({
               displayName: "Customer",
               photoURL: profilePic || null,
             })
-            .then(() => user.reload()) // Force refresh the user's data
-            .then(() => user.getIdToken()) // Get the updated ID token
+            .then(() => user.reload())
+            .then(() => user.getIdToken())
             .then((idToken) => ({ user, idToken }));
         })
         .then(({ user, idToken }) => {
+          const uid = user.uid;
+
+          // Personal Info
           const userData = {
             personalInfo: {
               email: user.email,
-              username: username, // User-provided name stored in the database
-              displayName: "Customer", // Ensure display name matches
-              phone: phone || null,
+              firstName,
+              lastName,
+              phone: phone,
+              phone2: phone2 || null,
               photoURL: profilePic || null,
             },
             orders: [],
             favorites: [],
           };
 
-          const uid = user.uid;
+          // Address Data
+          const addressData = {
+            governorate,
+            city,
+            area,
+            houseNumber,
+            fullAddress,
+          };
 
-          // Store user data in the Realtime Database
-          return fetch(
-            `https://matager-f1f00-default-rtdb.firebaseio.com/users/${uid}.json?auth=${idToken}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(userData),
-            }
-          );
+          // Save personal info and address data
+          return Promise.all([
+            fetch(
+              `https://matager-f1f00-default-rtdb.firebaseio.com/users/${uid}/personalInfo.json?auth=${idToken}`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData.personalInfo),
+              }
+            ),
+            fetch(
+              `https://matager-f1f00-default-rtdb.firebaseio.com/users/${uid}/address.json?auth=${idToken}`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(addressData),
+              }
+            ),
+          ]).then(() => user); // Return user object for UI update
         })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to store user data in the database");
-          }
-          return Swal.fire({
+        .then((user) => {
+          // Update the UI once the data is saved
+          updateUI(user);
+          Swal.fire({
             icon: "success",
-            title: "Account Created Successfully",
+            title: "Account Created and Signed In",
             text: "Welcome! You are now signed in.",
           });
         })
