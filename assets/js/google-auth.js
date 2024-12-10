@@ -254,6 +254,7 @@ async function updateUI(user) {
 
   if (user) {
     const uid = user.uid; // Get the authenticated user's UID
+    const token = await user.getIdToken();
     const baseUrl = `https://matager-f1f00-default-rtdb.firebaseio.com/users/${uid}`;
 
     // Fetch both personalInfo, address, and orderHistory
@@ -420,12 +421,14 @@ async function updateUI(user) {
           orderHistoryGrid.innerHTML = ""; // Clear previous content
 
           if (orderHistory) {
-            Object.entries(orderHistory).forEach(([key, orderData]) => {
+            const orderEntries = Object.entries(orderHistory).reverse(); // Reverse the order
+
+            orderEntries.forEach(([key, orderData]) => {
               // Start building the order card
               let orderCardHTML = `
         <div class="order-card">
           <div class="order-header">
-            <h5 class="flex">Order:<p>${key}</p></h5>
+            <h5 class="flex"><p>${key}</p></h5>
             <span class="status ${orderData.progress.toLowerCase()}">${
                 orderData.progress
               }</span>
@@ -452,8 +455,7 @@ async function updateUI(user) {
               orderCardHTML += `
           </div>
           <div class="order-actions">
-            <button class="btn-view">View</button>
-            <button class="btn-cancel">Cancel</button>
+            <button onclick="printinvoice('${key}', '${uid}', '${token}')" class="btn-view">Print Invoice</button>
           </div>
         </div>
       `;
@@ -484,3 +486,103 @@ async function updateUI(user) {
     document.getElementById("user-info").style.display = "none";
   }
 }
+
+//printing ivoice
+async function printinvoice(orderId, userId, userToken) {
+  try {
+    // Construct the API URL with userId and userToken
+    const url = `https://matager-f1f00-default-rtdb.firebaseio.com/users/${userId}/orderHistory/${orderId}.json?auth=${userToken}`;
+
+    // Fetch order details from the API
+    const response = await fetch(url);
+    const orderData = await response.json();
+
+    if (!orderData || !orderData.order) {
+      console.error("Order not found or invalid data.");
+      return;
+    }
+
+    // Extract the items from the order
+    const items = orderData.order;
+
+    // Initialize jsPDF
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Add Order ID and Progress
+    doc.setFontSize(16);
+    doc.text(`Order ID: ${orderId}`, 10, 10);
+    doc.text(`Progress: ${orderData.progress}`, 10, 20);
+
+    // Add Items Section
+    doc.setFontSize(14);
+    doc.text("Items:", 10, 30);
+
+    // Configure item layout
+    let yPosition = 50;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const imageWidth = 40;
+    const imageHeight = 40;
+    const padding = 10;
+
+    for (const item of items) {
+      // Fetch item image as Base64
+      const imgBase64 = await fetchImageAsBase64(item.photo);
+
+      // Add image
+      if (imgBase64) {
+        doc.addImage(imgBase64, "JPEG", 10, yPosition, imageWidth, imageHeight);
+      }
+
+      // Align text with the image
+      const xTextStart = 10 + imageWidth + padding; // Text starts after image + padding
+      const lineHeight = 8;
+      const details = [
+        `Title: ${item.title}`,
+        `Brand: ${item.brand}`,
+        `Size: ${item.size}`,
+        `Color: ${item.color}`,
+        `Qty: ${item.qty}`,
+        `Price: ${item.price}`,
+      ];
+
+      // Add text, line by line, next to the image
+      details.forEach((line, index) => {
+        doc.text(line, xTextStart, yPosition + index * lineHeight + 5);
+      });
+
+      // Move yPosition for the next item
+      yPosition += Math.max(imageHeight, details.length * lineHeight) + padding;
+
+      // Add a new page if content exceeds current page height
+      if (yPosition > doc.internal.pageSize.getHeight() - 20) {
+        doc.addPage();
+        yPosition = 20; // Reset yPosition for new page
+      }
+    }
+
+    // Save the generated PDF
+    doc.save(`Order_${orderId}.pdf`);
+  } catch (error) {
+    console.error("Error printing order:", error);
+  }
+}
+
+// Helper function to fetch an image as Base64
+async function fetchImageAsBase64(url) {
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (error) {
+    console.error("Error fetching image:", error);
+    return null;
+  }
+}
+
+//printing ivoice//

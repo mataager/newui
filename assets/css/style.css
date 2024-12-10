@@ -3990,8 +3990,9 @@ th {
 
 
 .order-history-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  display: flex;
+  /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
+  flex-direction: column;
   gap: 20px;
 }
 
@@ -4007,6 +4008,7 @@ th {
 
 .order-card .order-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
