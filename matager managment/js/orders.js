@@ -93,12 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
       totalOrdersElement.innerHTML = totalOrderscount; //
 
       for (const [orderId, order] of reversedOrders) {
-        const customerName = `${order.personal_info.firstName} ${order.personal_info.lastName}`;
+        const customerName = `${order.personal_info.name}`;
         const email = order.personal_info.email;
         const city = order.personal_info.city;
         const address = order.personal_info.address;
-        const phoneNumber = order.personal_info.phoneNumber;
-        const housenumber = order.personal_info.housePhoneNumber;
+        const phoneNumber = order.personal_info.phone;
+        const housenumber = order.personal_info.phone2;
+        const Customeruid = order.Customeruid;
+        const cutomerorderuid = order.orderUID;
 
         const totalPrice =
           order.cart.reduce(
@@ -143,13 +145,13 @@ document.addEventListener("DOMContentLoaded", () => {
                             <button type="button" class="formbold-form-label addbtn pointer open-order-btn p-7">
                                 <i class="bi bi-plus-circle point" data-order-id="${orderId}"></i>
                             </button>
-                            <button type="button" class="formbold-form-label addbtn pointer accept-order-btn p-7" data-order-id="${orderId}" id="Activate" onclick="updateOrderStatus('${orderId}', 'accepted', event)">
-                                <i class="bi bi-box-fill pointer"></i>
+                            <button type="button" class="formbold-form-label addbtn pointer accept-order-btn p-7" data-order-id="${orderId}" id="Activate" onclick="updateOrderStatus('${orderId}','${Customeruid}','${cutomerorderuid}', 'accepted', event)">
+                              <i class="bi bi-box-fill pointer"></i>
                             </button>
                             <button type="button" class="formbold-form-label addbtn pointer accept-order-btn p-7" data-order-id="${orderId}" id="print" onclick="print('${orderId}')">
                                 <i class="bi bi-printer"></i>
                             </button>
-                            <button type="button" class="formbold-form-label addbtn pointer deaccept-order-btn p-7" data-order-id="${orderId}" id="Deactivate" onclick="updateOrderStatus('${orderId}', 'notaccepted', event)">
+                            <button type="button" class="formbold-form-label addbtn pointer deaccept-order-btn p-7" data-order-id="${orderId}" id="Deactivate" onclick="updateOrderStatus('${orderId}','${Customeruid}','${cutomerorderuid}', 'notaccepted', event)">
                                 <i class="bi bi-x-circle pointer"></i>
                             </button>
                             
@@ -237,8 +239,17 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  async function updateOrderStatus(orderId, status, event) {
+  async function updateOrderStatus(
+    orderId,
+    Customeruid,
+    cutomerorderuid,
+    status,
+    event
+  ) {
     event.stopPropagation(); // Prevent row click event
+
+    const customerUid = Customeruid;
+    const customerOrderUid = cutomerorderuid;
 
     const row = document.querySelector(`tr[data-order-id="${orderId}"]`);
     if (!row) {
@@ -261,14 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       // Get the ID token of the authenticated user
       const idToken = await user.getIdToken();
-
-      // Get the total price of the order
-      // const totalPrice = parseFloat(
-      //   row
-      //     .querySelector("td:nth-last-child(2)")
-      //     .textContent.replace(" EGP", "")
-      // );
-      //
       const shippingFees = parseFloat(
         row
           .querySelector("td:nth-last-child(3)") // Third-to-last <td> for shipping fees
@@ -285,8 +288,6 @@ document.addEventListener("DOMContentLoaded", () => {
       //
 
       if (status === "accepted") {
-        console.log(totalPrice);
-
         // Update the status in the database with ID token
         const response = await fetch(
           `${url}/Stores/${uid}/orders/${orderId}.json?auth=${idToken}`,
@@ -298,6 +299,13 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             body: JSON.stringify({ progress: "accepted" }),
           }
+        );
+
+        await updateCustomerOrder(
+          customerUid,
+          customerOrderUid,
+          status,
+          idToken
         );
 
         if (!response.ok) {
@@ -440,6 +448,12 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             body: JSON.stringify({ progress: status }),
           }
+        );
+        await updateCustomerOrder(
+          customerUid,
+          customerOrderUid,
+          status,
+          idToken
         );
 
         if (!response.ok) {
@@ -732,17 +746,18 @@ async function print(orderId) {
     // Add Order Details to PDF
     doc.setFontSize(16);
     doc.text(`Order ID: ${orderId}`, 10, 10);
-    doc.text(
-      `Customer Name: ${order.personal_info.firstName} ${order.personal_info.lastName}`,
-      10,
-      20
-    );
+    doc.text(`Customer Name: ${order.personal_info.name}`, 10, 20);
     doc.text(`Email: ${order.personal_info.email}`, 10, 30);
     doc.text(`City: ${order.personal_info.city}`, 10, 40);
     doc.text(`Address: ${order.personal_info.address}`, 10, 50);
-    doc.text(`Phone Number: ${order.personal_info.phoneNumber}`, 10, 60);
 
-    // Shipping Fees and Total Price
+    // Display both phone numbers, if available
+    doc.text(`Phone 1: ${order.personal_info.phone}`, 10, 60);
+    if (order.personal_info.phone2) {
+      doc.text(`Phone 2: ${order.personal_info.phone2}`, 10, 70);
+    }
+
+    // Shipping Fees, Payment Type, and Total Price
     const shippingFees = order.shippingFees;
     const totalPrice =
       order.cart.reduce(
@@ -751,19 +766,20 @@ async function print(orderId) {
         0
       ) + shippingFees;
 
-    doc.text(`Shipping Fees: ${shippingFees} EGP`, 10, 70);
-    doc.text(`Total Price: ${totalPrice} EGP`, 10, 80);
+    doc.text(`Shipping Fees: ${shippingFees} EGP`, 10, 80);
+    doc.text(`Total Price: ${totalPrice} EGP`, 10, 90);
+    doc.text(`Payment Type: ${order.personal_info.payment}`, 10, 100);
 
     // Add Items to PDF
     doc.setFontSize(14);
-    doc.text("Items:", 10, 100);
+    doc.text("Items:", 10, 110);
 
-    let yPosition = 120; // Start position for items
-    const pageWidth = doc.internal.pageSize.getWidth(); // Get the page width
-    const imageWidth = 40; // Set image width
-    const imageHeight = 40; // Set image height
-    const padding = 10; // Padding between image and text
-    const textPadding = 5; // Padding for text to create space from the image
+    let yPosition = 130; // Start position for items
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const imageWidth = 40;
+    const imageHeight = 40;
+    const padding = 10;
+    const textPadding = 5;
 
     for (const item of order.cart) {
       const itemText = `${item.title} - ${item.brand}, Size: ${item.productSize}, Color: ${item.productColor}, Qty: ${item.quantity}, Price: ${item.price}`;
@@ -771,37 +787,30 @@ async function print(orderId) {
       // Fetch and add the image to PDF
       const imgBase64 = await fetchImageAsBase64(item.photourl);
       if (imgBase64) {
-        // Add image (positioning before the text)
+        // Add image
         doc.addImage(imgBase64, "JPEG", 10, yPosition, imageWidth, imageHeight);
 
-        // Add text next to the image with padding
+        // Add text next to the image
         const xPosition = 10 + imageWidth + padding;
-        const maxTextWidth = pageWidth - xPosition - padding; // Ensure the text fits within the page width
-
-        // Wrap text if it's too long
-        const wrappedText = doc.splitTextToSize(itemText, maxTextWidth); // Wrap text within the specified width
-
-        // Position the text with padding
+        const maxTextWidth = pageWidth - xPosition - padding;
+        const wrappedText = doc.splitTextToSize(itemText, maxTextWidth);
         doc.text(wrappedText, xPosition, yPosition + textPadding);
 
-        // Increase yPosition to accommodate the next item
-        yPosition += imageHeight + padding + wrappedText.length * 5; // Adjust based on the number of wrapped lines
+        // Increase yPosition for the next item
+        yPosition += imageHeight + padding + wrappedText.length * 5;
       } else {
-        // No image, just add the text with padding
-        const maxTextWidth = pageWidth - padding * 2; // Allow for padding on both sides
-        const wrappedText = doc.splitTextToSize(itemText, maxTextWidth); // Wrap text
+        // No image, just add the text
+        const maxTextWidth = pageWidth - padding * 2;
+        const wrappedText = doc.splitTextToSize(itemText, maxTextWidth);
+        doc.text(wrappedText, 10, yPosition);
 
-        // Center the wrapped text
-        const xPosition =
-          (pageWidth -
-            doc.getStringUnitWidth(wrappedText.join("\n")) *
-              doc.internal.getFontSize()) /
-          2;
+        yPosition += wrappedText.length * 5 + padding;
+      }
 
-        doc.text(wrappedText, xPosition, yPosition);
-
-        // Increase yPosition based on wrapped lines
-        yPosition += wrappedText.length * 5 + padding; // Add extra space between items
+      // Add a new page if the yPosition exceeds page height
+      if (yPosition > doc.internal.pageSize.getHeight() - 20) {
+        doc.addPage();
+        yPosition = 20; // Reset yPosition for new page
       }
     }
 
@@ -826,5 +835,33 @@ async function fetchImageAsBase64(imageUrl) {
   } catch (error) {
     console.error("Error fetching image:", error);
     return null;
+  }
+}
+
+//
+async function updateCustomerOrder(
+  customerUid,
+  customerOrderUid,
+  status,
+  idToken
+) {
+  const orderHistoryUrl = `https://matager-f1f00-default-rtdb.firebaseio.com/users/${customerUid}/orderHistory/${customerOrderUid}.json?auth=${idToken}`;
+  try {
+    const response = await fetch(orderHistoryUrl, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ progress: status }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update customer's order history");
+    }
+
+    console.log("Customer order history updated successfully.");
+  } catch (error) {
+    console.error("Error updating customer's order history:", error);
+    throw error; // Re-throw the error to be handled by the caller
   }
 }
