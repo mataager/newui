@@ -101,153 +101,6 @@ auth.onAuthStateChanged((user) => {
     document.getElementById("signout-btn").style.display = "none";
   }
 });
-
-//test 2 woooow
-// function updateUI(user) {
-//   // Show the preloader initially
-//   document.getElementById("preloader").style.display = "flex";
-
-//   if (user) {
-//     const uid = user.uid; // Get the authenticated user's UID
-//     const baseUrl = `https://matager-f1f00-default-rtdb.firebaseio.com/users/${uid}`;
-
-//     // Fetch both personalInfo and address1
-//     Promise.all([
-//       fetch(`${baseUrl}/personalInfo.json`).then((response) => {
-//         if (!response.ok) throw new Error("Failed to fetch personalInfo.");
-//         return response.json();
-//       }),
-//       fetch(`${baseUrl}/address.json`).then((response) => {
-//         if (!response.ok) throw new Error("Failed to fetch address.");
-//         return response.json();
-//       }),
-//     ])
-//       .then(([personalInfoData, addressData]) => {
-//         const personalInfo = Object.values(personalInfoData || {})[0] || {};
-//         const allAddresses = addressData || {};
-
-//         const email = user.email || "No Email";
-//         const username =
-//           `${personalInfo.firstName || ""} ${
-//             personalInfo.lastName || ""
-//           }`.trim() || "No Username";
-//         const photoURL =
-//           personalInfo.photoURL || "https://i.imgur.com/Zaneuop.png";
-//         const role = personalInfo.role || "Customer";
-//         const firstName = personalInfo.firstName || "";
-//         const lastName = personalInfo.lastName || "";
-//         const phone = personalInfo.phone || "No Phone Number";
-//         const phone2 = personalInfo.phone2 || "No Phone Number";
-
-//         // Hide the preloader once data is fetched
-//         document.getElementById("preloader").style.display = "none";
-
-//         document.getElementById("google-signin-btn").style.display = "none";
-//         document.getElementById("signout-btn").style.display = "block";
-//         document.getElementById("user-info").style.display = "block";
-
-//         // Populate user information in UI
-//         document.getElementById("user-name").innerText = username;
-//         document.getElementById(
-//           "user-email"
-//         ).innerHTML = `<i class="bi bi-envelope-fill mr-5"></i> ${email}`;
-//         document.getElementById("email-address").innerText = email;
-//         document.getElementById("first-name").innerText = firstName;
-//         document.getElementById("last-name").innerText = lastName;
-//         document.getElementById("role").innerText = role;
-//         document.getElementById("phone-number").innerText = phone;
-//         document.getElementById("phone-number2").innerText = phone2;
-//         document.getElementById("user-photo").src = photoURL;
-
-//         // Add the edit user personal info logic with updated UID
-//         const saveChangesButton = document.getElementById(
-//           "savepersonalinfochanges"
-//         );
-//         saveChangesButton.setAttribute(
-//           "onclick",
-//           `savepersonalinfochanges('${uid}')`
-//         );
-
-//         const addressesContainer = document.querySelector(
-//           ".addresses-container"
-//         );
-//         addressesContainer.innerHTML = ""; // Clear previous addresses
-
-//         if (!allAddresses || Object.keys(allAddresses).length === 0) {
-//           // No addresses found
-//           const noAddressDiv = `
-//             <div id="no-address-container" class="no-address-container">
-//               <p>No address yet. Try adding one!</p>
-//             </div>
-//           `;
-//           addressesContainer.insertAdjacentHTML("beforeend", noAddressDiv);
-//         } else {
-//           // Populate user addresses
-//           Object.entries(allAddresses).forEach(([id, address]) => {
-//             const addressHTML = `
-//               <div class="account-section">
-//                 <div class="flex justify-content-flex-end mb-10">
-//                   <div class="flex align-items">
-//                     <button class="edit-button mr-5 mb-10" onclick="delAddress('${id}')">
-//                       <i class="bi bi-trash"></i>
-//                     </button>
-//                   </div>
-//                 </div>
-//                 <div class="details-row">
-//                   <div class="detail-group">
-//                     <h6>Governorate</h6>
-//                     <p>${address.governorate || "No Governorate"}</p>
-//                   </div>
-//                   <div class="detail-group">
-//                     <h6>City/State</h6>
-//                     <p>${address.city || "No City"}</p>
-//                   </div>
-//                 </div>
-//                 <div class="details-row">
-//                   <div class="detail-group">
-//                     <h6>Area</h6>
-//                     <p>${address.area || "No Area"}</p>
-//                   </div>
-//                   <div class="detail-group">
-//                     <h6>House-Number</h6>
-//                     <p>${address.houseNumber || "No House Number"}</p>
-//                   </div>
-//                 </div>
-//                 <div class="details-row">
-//                   <div class="detail-group">
-//                     <h6>Address</h6>
-//                     <p>${address.fullAddress || "No Full Address"}</p>
-//                   </div>
-//                 </div>
-//               </div>
-//             `;
-//             // Append the address section
-//             addressesContainer.insertAdjacentHTML("beforeend", addressHTML);
-//           });
-//         }
-//       })
-//       .catch((error) => {
-//         console.error(error);
-
-//         // Hide the preloader even if there's an error
-//         document.getElementById("preloader").style.display = "none";
-
-//         Swal.fire({
-//           icon: "error",
-//           title: "Error",
-//           text: "Could not fetch additional user information.",
-//         });
-//       });
-//   } else {
-//     // If no user is signed in, reset the UI
-//     document.getElementById("preloader").style.display = "none";
-//     document.getElementById("google-signin-btn").style.display = "block";
-//     document.getElementById("signout-btn").style.display = "none";
-//     document.getElementById("user-info").style.display = "none";
-//   }
-// }
-
-//v2
 async function updateUI(user) {
   // Show the preloader initially
   document.getElementById("preloader").style.display = "flex";
@@ -374,46 +227,6 @@ async function updateUI(user) {
           });
         }
 
-        // Render order history
-        // const renderOrderHistory = () => {
-        //   const orderHistoryGrid = document.querySelector(
-        //     ".order-history-grid"
-        //   );
-        //   orderHistoryGrid.innerHTML = ""; // Clear previous content
-        //   if (orderHistory) {
-        //     Object.entries(orderHistory).forEach(([key, orderData]) => {
-        //       const orderCardHTML = `
-        //         <div class="order-card">
-        //           <div class="order-header">
-        //             <h5 class="flex ">Order:<p>${key}</p></h5>
-        //             <span class="status ${orderData.progress.toLowerCase()}">${
-        //         orderData.progress
-        //       }</span>
-        //           </div>
-        //           <div class="order-details">
-        //           <img style="width: 100px;padding-bottom: 10px" src="${
-        //             orderData.order[0]?.photo || "Unknown"
-        //           }"></img>
-        //             <span>${
-        //               orderData.order[0]?.title || "Unknown"
-        //             }</span>
-        //             <span>${
-        //               orderData.order[0]?.price || "Unknown"
-        //             }</span>
-        //             <span>Qty: ${orderData.order[0]?.qty || 0}</span>
-        //           </div>
-        //           <div class="order-actions">
-        //             <button class="btn-view">View</button>
-        //             <button class="btn-cancel">Cancel</button>
-        //           </div>
-        //         </div>
-        //       `;
-        //       orderHistoryGrid.insertAdjacentHTML("beforeend", orderCardHTML);
-        //     });
-        //   }
-        // };
-
-        // renderOrderHistory();
         const renderOrderHistory = () => {
           const orderHistoryGrid = document.querySelector(
             ".order-history-grid"
@@ -534,6 +347,8 @@ async function printinvoice(orderId, userId, userToken) {
         doc.addImage(imgBase64, "JPEG", 10, yPosition, imageWidth, imageHeight);
       }
 
+      const finalprice = parseFloat(item.price) * parseInt(item.qty, 10);
+
       // Align text with the image
       const xTextStart = 10 + imageWidth + padding; // Text starts after image + padding
       const lineHeight = 8;
@@ -543,7 +358,7 @@ async function printinvoice(orderId, userId, userToken) {
         `Size: ${item.size}`,
         `Color: ${item.color}`,
         `Qty: ${item.qty}`,
-        `Price: ${item.price}`,
+        `Price: ${finalprice}`,
       ];
 
       // Add text, line by line, next to the image
@@ -568,7 +383,7 @@ async function printinvoice(orderId, userId, userToken) {
   }
 }
 
-// Helper function to fetch an image as Base64
+// // Helper function to fetch an image as Base64
 async function fetchImageAsBase64(url) {
   try {
     const response = await fetch(url);

@@ -1654,6 +1654,10 @@ a.footer-link:is(:hover, :focus) {
   .manage-cart-item {
     flex-direction: column !important;
   }
+
+  .details-row {
+    flex-direction: column !important;
+  }
 }
 
 #cart-items h5 {
@@ -4029,15 +4033,15 @@ th {
   text-transform: uppercase;
 }
 
-.order-card .status.shipped {
-  background-color: #4caf50;
+.order-card .status.accepted {
+  background-color: #379d3b;
 }
 
 .order-card .status.pending {
   background-color: #ff9800;
 }
 
-.order-card .status.cancelled {
+.order-card .status.notaccepted {
   background-color: #f44336;
 }
 
@@ -4161,13 +4165,14 @@ th {
 
 .details-row {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   margin-bottom: 15px;
 }
 
 .detail-group {
   flex: 1;
-  padding: 0 10px;
+  padding: 0 10px 10px;
 }
 
 .detail-group h6 {
@@ -4259,11 +4264,12 @@ th {
 .select-governorate {
   appearance: none;
   /* Removes default arrow styling */
-  background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%23007bff"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>') no-repeat right 12px center;
+  background: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%23000000"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>') no-repeat right 12px center;
   background-size: 16px 16px;
   /* Adjusts arrow size */
   padding-right: 36px;
   /* Ensures text doesn't overlap with arrow */
+  color: #000;
 }
 
 /* Container for centering form elements */

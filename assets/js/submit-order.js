@@ -37,7 +37,7 @@ const auth = firebase.auth();
 //
 
 //main
-//
+
 async function submitOrder() {
   // Show the preloader
   document.getElementById("preloader").classList.remove("hidden");
@@ -170,12 +170,43 @@ async function submitOrder() {
     // Get personal information and shipping fees
     const personalInfo = await getPersonalInfo(Customeruid, idToken);
     const shippingFees = parseFloat(localStorage.getItem("shippingFees")) || 0;
+    const payment = localStorage.getItem("Payment") || "N/A";
 
-    // Construct the order
-    const order = {
+    // // await addOrderToCustomerHistory(Customeruid, idToken, order);
+    // const orderUID = await addOrderToCustomerHistory(
+    //   Customeruid,
+    //   idToken,
+    //   order
+    // );
+
+    // // Construct the order
+    // const order = {
+    //   cart: updatedCart,
+    //   personal_info: personalInfo,
+    //   Customeruid: Customeruid,
+    //   orderUID: orderUID,
+    //   shippingFees,
+    // };
+    // Construct a preliminary order object
+    const preliminaryOrder = {
       cart: updatedCart,
       personal_info: personalInfo,
       shippingFees,
+      payment,
+    };
+
+    // Add order to customer history and get the order UID
+    const orderUID = await addOrderToCustomerHistory(
+      Customeruid,
+      idToken,
+      preliminaryOrder
+    );
+
+    // Construct the final order object
+    const order = {
+      ...preliminaryOrder, // Spread the preliminary order properties
+      Customeruid: Customeruid,
+      orderUID: orderUID, // Add the order UID
     };
 
     // Submit the order to Firebase
@@ -195,8 +226,6 @@ async function submitOrder() {
     // Clear the cart
     localStorage.removeItem("cart");
     document.getElementById("preloader").classList.add("hidden");
-
-    await addOrderToCustomerHistory(Customeruid, idToken, order);
 
     Swal.fire({
       icon: "success",
@@ -232,23 +261,32 @@ async function getPersonalInfo(Customeruid, idToken) {
     // Extract personal info key and details
     const personalInfoKey = Object.keys(data)[0];
     const personalInfo = data[personalInfoKey];
-
+    const userid = Customeruid;
     const name = `${personalInfo.firstName} ${personalInfo.lastName}`;
     const { email, phone, phone2 } = personalInfo;
 
-    // Retrieve address, city, payment, and shipping fees from local storage
+    // Retrieve address, city, and shipping fees from local storage
     const address = localStorage.getItem("Address") || "N/A";
     const city = localStorage.getItem("City") || "N/A";
-    const payment = localStorage.getItem("Payment") || "N/A";
     const shippingFees = parseFloat(localStorage.getItem("shippingFees")) || 0;
 
     // Combine all information into a single object
-    return { name, email, phone, phone2, address, city, payment, shippingFees };
+    return {
+      userid,
+      name,
+      email,
+      phone,
+      phone2,
+      address,
+      city,
+      shippingFees,
+    };
   } catch (error) {
     console.error("Error fetching personal information:", error);
     throw error;
   }
 }
+
 
 async function addOrderToCustomerHistory(Customeruid, idToken, order) {
   try {
@@ -273,14 +311,20 @@ async function addOrderToCustomerHistory(Customeruid, idToken, order) {
             color: item.productColor,
           })),
           progress: "Pending", // Add progress with a default value of "Pending"
+          payment: order.payment,
         }),
       }
     );
 
     if (!saveResponse.ok) throw new Error("Order history couldn't save");
 
-    console.log("Order history added successfully");
+    // Retrieve the unique key from the Firebase response
+    const saveData = await saveResponse.json();
+    const orderUID = saveData.name; // Firebase's generated key
+
+    return orderUID; // Return the UID if needed elsewhere
   } catch (error) {
     console.error("Error updating order history:", error);
+    throw error; // Rethrow the error to handle it in the calling function
   }
 }

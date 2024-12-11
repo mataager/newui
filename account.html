@@ -40,8 +40,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
-
 </head>
 <header class="header" data-header="">
 
@@ -358,7 +356,35 @@
             }
 
             // jQuery for searching orders by Order ID
+            // $(document).ready(function () {
+            //     $('#search-order').on('keyup', function () {
+            //         const searchValue = $(this).val().toLowerCase();
+            //         let matchFound = false; // Flag to track if any order matches
+
+            //         $('.order-card').each(function () {
+            //             const orderId = $(this).find('.order-header h5').text().toLowerCase();
+            //             if (orderId.includes(searchValue)) {
+            //                 $(this).show();
+            //                 matchFound = true; // Match found
+            //             } else {
+            //                 $(this).hide();
+            //             }
+            //         });
+
+            //         // Check if any orders matched and handle the "no order found" message
+            //         if (!matchFound) {
+            //             if ($('#no-orders-found').length === 0) {
+            //                 // Append "no order found" message if it doesn't already exist
+            //                 $('.order-history-grid').append('<div id="no-orders-found" class="no-orders-message">No orders with this ID</div>');
+            //             }
+            //         } else {
+            //             // Remove the "no order found" message if any order matches
+            //             $('#no-orders-found').remove();
+            //         }
+            //     });
+            // });
             $(document).ready(function () {
+                // Handle the search functionality on keyup
                 $('#search-order').on('keyup', function () {
                     const searchValue = $(this).val().toLowerCase();
                     let matchFound = false; // Flag to track if any order matches
@@ -373,18 +399,23 @@
                         }
                     });
 
-                    // Check if any orders matched and handle the "no order found" message
+                    // Handle the "no order found" message
                     if (!matchFound) {
                         if ($('#no-orders-found').length === 0) {
-                            // Append "no order found" message if it doesn't already exist
                             $('.order-history-grid').append('<div id="no-orders-found" class="no-orders-message">No orders with this ID</div>');
                         }
                     } else {
-                        // Remove the "no order found" message if any order matches
                         $('#no-orders-found').remove();
                     }
                 });
+
+                // Trigger search if there is already input in the field when the page loads
+                const initialValue = $('#search-order').val();
+                if (initialValue) {
+                    $('#search-order').trigger('keyup');
+                }
             });
+
         </script>
 
 

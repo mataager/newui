@@ -129,7 +129,36 @@ function AddAddress() {
             <div class="details-row">
                 <div class="detail-group">
                     <h6>Governorate</h6>
-                    <input type="text" placeholder="Enter Governorate">
+                    <select id="governorate" style="margin: 0;margin-top: 5px;padding:8;font-size: 12px;" class="swal2-input select-governorate width-available">
+        <option value="" disabled selected>Select your governorate</option>
+        <option value="Cairo">Cairo</option>
+        <option value="Giza">Giza</option>
+        <option value="Alexandria">Alexandria</option>
+        <option value="Port Said">Port Said</option>
+        <option value="Suez">Suez</option>
+        <option value="Damietta">Damietta</option>
+        <option value="Dakahlia">Dakahlia</option>
+        <option value="Sharqia">Sharqia</option>
+        <option value="Qalyubia">Qalyubia</option>
+        <option value="Kafr El Sheikh">Kafr El Sheikh</option>
+        <option value="Gharbia">Gharbia</option>
+        <option value="Monufia">Monufia</option>
+        <option value="Beheira">Beheira</option>
+        <option value="Ismailia">Ismailia</option>
+        <option value="Aswan">Aswan</option>
+        <option value="Asyut">Asyut</option>
+        <option value="Beni Suef">Beni Suef</option>
+        <option value="Fayoum">Fayoum</option>
+        <option value="Minya">Minya</option>
+        <option value="Qena">Qena</option>
+        <option value="Sohag">Sohag</option>
+        <option value="Red Sea">Red Sea</option>
+        <option value="New Valley">New Valley</option>
+        <option value="Matruh">Matruh</option>
+        <option value="North Sinai">North Sinai</option>
+        <option value="South Sinai">South Sinai</option>
+        <option value="Luxor">Luxor</option>
+      </select>
                 </div>
                 <div class="detail-group">
                     <h6>City/State</h6>
@@ -157,6 +186,7 @@ function AddAddress() {
   addressesContainer.appendChild(newAddressDiv);
   noaddressesmessage.classList.add("hidden");
 }
+
 function delAddress(addressId) {
   // Check if the address ID is provided
   if (!addressId) {
@@ -241,6 +271,107 @@ function delAddress(addressId) {
   });
 }
 
+// function Submitnewaddress() {
+//   // Get the authenticated user's UID and ID token
+//   firebase.auth().onAuthStateChanged((user) => {
+//     if (user) {
+//       const uid = user.uid; // Get the user's UID
+//       user
+//         .getIdToken(true) // Retrieve the user's ID token
+//         .then((idToken) => {
+//           // Base database URL for addresses
+//           const dbAddressUrl = `https://matager-f1f00-default-rtdb.firebaseio.com/users/${uid}/address.json?auth=${idToken}`;
+
+//           // Collect input values
+//           const governorate = document.querySelector(
+//             "input[placeholder='Enter Governorate']"
+//           ).value;
+//           const city = document.querySelector(
+//             "input[placeholder='Enter City/State']"
+//           ).value;
+//           const area = document.querySelector(
+//             "input[placeholder='Enter Area']"
+//           ).value;
+//           const houseNumber = document.querySelector(
+//             "input[placeholder='Enter House Number']"
+//           ).value;
+//           const fullAddress = document.querySelector(
+//             "input[placeholder='Enter Address']"
+//           ).value;
+
+//           // Validate inputs
+//           if (!governorate || !city || !area || !houseNumber || !fullAddress) {
+//             Swal.fire({
+//               icon: "error",
+//               title: "Error",
+//               text: "All fields are required. Please fill out all fields.",
+//             });
+//             return;
+//           }
+
+//           const newAddress = {
+//             area: area,
+//             city: city,
+//             fullAddress: fullAddress,
+//             governorate: governorate,
+//             houseNumber: houseNumber,
+//           };
+
+//           // Push the new address to Firebase
+//           fetch(dbAddressUrl, {
+//             method: "POST", // POST allows Firebase to auto-generate a key
+//             headers: {
+//               "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify(newAddress),
+//           })
+//             .then((response) => {
+//               if (response.ok) {
+//                 Swal.fire({
+//                   icon: "success",
+//                   title: "Success",
+//                   text: "Address added successfully!",
+//                   timer: 1500,
+//                   showConfirmButton: false,
+//                 }).then(() => {
+//                   // Reload the page after successful addition
+//                   location.reload();
+//                 });
+//               } else {
+//                 Swal.fire({
+//                   icon: "error",
+//                   title: "Error",
+//                   text: "Failed to add address. Please try again.",
+//                 });
+//               }
+//             })
+//             .catch((error) => {
+//               console.error("Error adding address:", error);
+//               Swal.fire({
+//                 icon: "error",
+//                 title: "Error",
+//                 text: "An error occurred. Please try again.",
+//               });
+//             });
+//         })
+//         .catch((error) => {
+//           console.error("Error retrieving ID token:", error);
+//           Swal.fire({
+//             icon: "error",
+//             title: "Error",
+//             text: "Failed to retrieve authentication token. Please try again.",
+//           });
+//         });
+//     } else {
+//       Swal.fire({
+//         icon: "error",
+//         title: "Error",
+//         text: "No authenticated user found. Please log in.",
+//       });
+//     }
+//   });
+// }
+
 function Submitnewaddress() {
   // Get the authenticated user's UID and ID token
   firebase.auth().onAuthStateChanged((user) => {
@@ -253,38 +384,38 @@ function Submitnewaddress() {
           const dbAddressUrl = `https://matager-f1f00-default-rtdb.firebaseio.com/users/${uid}/address.json?auth=${idToken}`;
 
           // Collect input values
-          const governorate = document.querySelector(
-            "input[placeholder='Enter Governorate']"
-          ).value;
-          const city = document.querySelector(
-            "input[placeholder='Enter City/State']"
-          ).value;
-          const area = document.querySelector(
-            "input[placeholder='Enter Area']"
-          ).value;
-          const houseNumber = document.querySelector(
-            "input[placeholder='Enter House Number']"
-          ).value;
-          const fullAddress = document.querySelector(
-            "input[placeholder='Enter Address']"
-          ).value;
+          const governorate =
+            document.querySelector("select#governorate").value;
+          const city = document
+            .querySelector("input[placeholder='Enter City/State']")
+            .value.trim();
+          const area = document
+            .querySelector("input[placeholder='Enter Area']")
+            .value.trim();
+          const houseNumber = document
+            .querySelector("input[placeholder='Enter House Number']")
+            .value.trim();
+          const fullAddress = document
+            .querySelector("input[placeholder='Enter Address']")
+            .value.trim();
 
           // Validate inputs
           if (!governorate || !city || !area || !houseNumber || !fullAddress) {
             Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: "All fields are required. Please fill out all fields.",
+              icon: "info", // Uses "info" to indicate it's a helpful reminder
+              title: "Please Complete All Fields",
+              text: "All Address fields are required.",
             });
             return;
           }
 
+          // Create a new address object
           const newAddress = {
-            area: area,
-            city: city,
-            fullAddress: fullAddress,
             governorate: governorate,
+            city: city,
+            area: area,
             houseNumber: houseNumber,
+            fullAddress: fullAddress,
           };
 
           // Push the new address to Firebase

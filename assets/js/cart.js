@@ -117,11 +117,6 @@ function fetchUserAddressAndRender() {
         });
       }
     } else {
-      Swal.fire({
-        icon: "warning",
-        title: "You must sign in first",
-        text: "Please sign in to view your address.",
-      });
     }
   });
 }
