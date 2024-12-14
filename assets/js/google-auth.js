@@ -233,6 +233,17 @@ async function updateUI(user) {
           );
           orderHistoryGrid.innerHTML = ""; // Clear previous content
 
+          if (!orderHistory || Object.keys(orderHistory).length === 0) {
+            // Append a message if no orders are found
+            const noOrdersMessage = `
+      <div class="no-orders-container">
+        <p>No orders yet. Start shopping to see your orders here!</p>
+      </div>
+    `;
+            orderHistoryGrid.insertAdjacentHTML("beforeend", noOrdersMessage);
+            return; // Exit the function
+          }
+
           if (orderHistory) {
             const orderEntries = Object.entries(orderHistory).reverse(); // Reverse the order
 
@@ -242,9 +253,13 @@ async function updateUI(user) {
         <div class="order-card">
           <div class="order-header">
             <h5 class="flex"><p>${key}</p></h5>
+            <div class="flex align-items flex-direction-column gap-10">
             <span class="status ${orderData.progress.toLowerCase()}">${
                 orderData.progress
               }</span>
+              <span class="payment-card">${orderData.payment}</span>
+            </div>
+            
           </div>
           <div class="order-details">
       `;
@@ -258,7 +273,10 @@ async function updateUI(user) {
               <div class="qty-circle">${item.qty || 0}</div>
             </div>
             <span>${item.title || "Unknown"}</span>
-            <span>${item.price || "Unknown"}</span>
+            <span>${
+              (parseFloat(item.price) * parseInt(item.qty || 0)).toFixed(2) ||
+              "Unknown"
+            }</span>
             
           </div>
         `;
@@ -325,7 +343,11 @@ async function printinvoice(orderId, userId, userToken) {
     // Add Order ID and Progress
     doc.setFontSize(16);
     doc.text(`Order ID: ${orderId}`, 10, 10);
-    doc.text(`Progress: ${orderData.progress}`, 10, 20);
+    doc.text(
+      `Progress: ${orderData.progress}, Payment: ${orderData.payment}`,
+      10,
+      20
+    );
 
     // Add Items Section
     doc.setFontSize(14);
@@ -382,8 +404,6 @@ async function printinvoice(orderId, userId, userToken) {
     console.error("Error printing order:", error);
   }
 }
-
-// // Helper function to fetch an image as Base64
 async function fetchImageAsBase64(url) {
   try {
     const response = await fetch(url);

@@ -1,8 +1,10 @@
-function handleAddressClick(city, fullAddress) {
+function handleAddressClick(city, fullAddress, governorate) {
   // Save selected city to localStorage
   localStorage.setItem("City", city);
   // Save the full address to localStorage
   localStorage.setItem("Address", fullAddress);
+  // Save the governorate to localStorage
+  localStorage.setItem("Governorate", governorate);
 
   // Trigger the shipping logic
   updateShippingFees();
@@ -31,7 +33,7 @@ function updateShippingFees() {
   );
   const cartTotalElement = document.getElementById("cart-total");
   const totalCartAmountElement = document.getElementById("total-cart-amount");
-  const savedCity = localStorage.getItem("City"); // Retrieve the saved city from localStorage
+  const savedGovernorate = localStorage.getItem("Governorate"); // Retrieve the saved city from localStorage
 
   // Parse cart total and total cart amount
   const cartTotal = cartTotalElement
@@ -51,8 +53,26 @@ function updateShippingFees() {
 
   // If free shipping is not applicable, use the old logic
   if (shippingFeesElement) {
-    if (savedCity) {
-      if (["Cairo", "Giza", "Alexandria"].includes(savedCity)) {
+    if (savedGovernorate) {
+      if (
+        [
+          "Cairo",
+          "Giza",
+          "Alexandria",
+          "Port Said",
+          "Suez",
+          "Damietta",
+          "Fayoum",
+          "Dakahlia",
+          "Sharqia",
+          "Qalyubia",
+          "Kafr El Sheikh",
+          "Gharbia",
+          "Monufia",
+          "Beheira",
+          "Ismailia",
+        ].includes(savedGovernorate)
+      ) {
         shippingFeesElement.innerText = "65 EGP";
         shippingFeesElementtotal.innerText = "65 EGP";
         localStorage.setItem("shippingFees", "65");
@@ -62,7 +82,7 @@ function updateShippingFees() {
         localStorage.setItem("shippingFees", "100");
       }
     } else {
-      console.log("Saved City from localStorage:", savedCity);
+      console.log("Saved City from localStorage:", savedGovernorate);
     }
   }
 }

@@ -2545,7 +2545,7 @@ select {
 }
 
 /* Modal styles */
-.modal {
+/* .modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -2603,7 +2603,7 @@ select {
 }
 
 /* Keyframes for fade-in animation */
-@keyframes fadeIn {
+/* @keyframes fadeIn {
   from {
     opacity: 0;
     transform: scale(0.8);
@@ -2613,6 +2613,103 @@ select {
     opacity: 1;
     transform: scale(1);
   }
+} */
+/* Modal styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+  z-index: 100;
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+  height: -webkit-fill-available;
+  overflow: auto;
+  width: 70%;
+  transform: scale(0.8);
+  transition: transform 0.3s ease-in-out;
+  /* Start from below the viewport */
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  animation: slideUpSmooth 0.6s ease-out forwards;
+}
+
+/* Hide the scrollbar */
+.modal-content::-webkit-scrollbar {
+  display: none;
+  /* For WebKit browsers */
+}
+
+/* For other browsers */
+.modal-content {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.modal.show .modal-content {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* Keyframes for smoother bottom-to-top entrance animation */
+@keyframes slideUpSmooth {
+  from {
+    opacity: 0;
+    transform: translateY(100vh) scale(0.95);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: translateY(30vh) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Keyframes for background pulse animation */
+@keyframes pulseBackground {
+  0% {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  50% {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
+  100% {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Apply background animation to modal */
+.modal.show {
+  animation: pulseBackground 2s infinite;
 }
 
 .flex-end {
@@ -4288,10 +4385,13 @@ th {
   }
 }
 
-.no-address-container {
+.no-address-container,
+.no-orders-container {
   text-align: center;
   margin: 50px;
 }
+
+
 
 .address-card {
   background: white;
@@ -4441,4 +4541,17 @@ th {
   /* Makes the scrollbar thin */
   scrollbar-color: #888 #f1f1f1;
   /* Thumb color and track color */
+}
+
+.payment-card {
+  padding: 5px 20px;
+  border-radius: 16px;
+  font-size: x-small;
+  color: white;
+  text-transform: uppercase;
+  background: black;
+}
+
+.gap-10 {
+  gap: 10px;
 }

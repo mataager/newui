@@ -133,7 +133,7 @@ async function submitOrder() {
       } else {
         // Delete the size/color if stock is depleted
         await fetch(
-          `${url}/Stores/${uid}/Products/${item.id}/sizes/${item.productSize}/${item.productColor}.json?auth=${idToken}`,
+          `${url}/Stores/${uid}/Products/${item.id}.json?auth=${idToken}`,
           {
             method: "DELETE",
           }
@@ -286,7 +286,6 @@ async function getPersonalInfo(Customeruid, idToken) {
     throw error;
   }
 }
-
 
 async function addOrderToCustomerHistory(Customeruid, idToken, order) {
   try {

@@ -133,12 +133,13 @@ function renderAddresses(addresses) {
     div.classList.add("account-section", "address-card");
     div.setAttribute(
       "onclick",
-      `handleAddressClick('${address.city}','${address.fullAddress}', this)`
+      `handleAddressClick('${address.city}','${address.fullAddress}','${address.governorate}', this)`
     );
 
     // Apply special styling to the first card
     if (index === 0) {
       div.style.border = "2px solid rgb(131, 131, 131)";
+      governorate = address.governorate;
       firstAddressCity = address.city;
       firstAddress = address.fullAddress; // Store the first address
     }
@@ -176,10 +177,12 @@ function renderAddresses(addresses) {
   });
 
   // Store the first address city and full address in localStorage if they exist
-  if (firstAddressCity && firstAddress) {
+  if (firstAddressCity && firstAddress && governorate) {
+    localStorage.setItem("Governorate", governorate);
     localStorage.setItem("City", firstAddressCity);
     localStorage.setItem("Payment", "COD");
-    localStorage.setItem("Address", JSON.stringify(firstAddress));
+    // localStorage.setItem("Address", JSON.stringify(firstAddress));
+    localStorage.setItem("Address", firstAddress);
     updateShippingFees();
   }
 }
