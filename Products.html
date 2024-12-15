@@ -188,13 +188,13 @@
             <script>
                 // Functionality for the 1inline button
                 document.getElementById('1inline').addEventListener('click', function () {
-                    const productList = document.querySelector('.product-list');
-                    const productOverview = document.querySelector('.product-overview');
-                    const container = document.querySelector('.product-grid'); // Replace with your actual container class
+                    const container = document.querySelector('.product-list');
 
-                    // Remove classes
-                    if (productList) productList.classList.remove('product-list');
-                    if (productOverview) productOverview.classList.remove('product-overview');
+                    if (container) {
+                        // Remove product-list and add product-grid
+                        container.classList.remove('product-list');
+                        container.classList.add('product-grid');
+                    }
 
                     // Update button active state
                     document.getElementById('1inline').classList.add('active');
@@ -203,14 +203,12 @@
 
                 // Functionality for the 2inline button
                 document.getElementById('2inline').addEventListener('click', function () {
-                    const container = document.querySelector('.product-grid'); // Replace with your container class
+                    const container = document.querySelector('.product-grid');
 
-                    // Add classes
                     if (container) {
+                        // Remove product-grid and add product-list
+                        container.classList.remove('product-grid');
                         container.classList.add('product-list');
-                        container.classList.add('product-overview');
-
-
                     }
 
                     // Update button active state
@@ -219,7 +217,13 @@
                 });
             </script>
 
-            <ul class="product-list product-grid">
+
+
+
+
+
+
+            <ul class="product-list">
 
 
             </ul>
