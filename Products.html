@@ -181,8 +181,32 @@
                     </div>
                 </div>
             </div>
+            <div class=" align-items center pb-20 inlines-button">
+                <button id="1inline" class=""><img src="./assets/icons/1inline.svg"></button>
+                <button id="2inline" class=""> <img src="./assets/icons/2inline.svg"></button>
+            </div>
+            <script>
+                // Functionality for the 1inline button
+                document.getElementById('1inline').addEventListener('click', function () {
+                    const productList = document.querySelector('.product-list');
+                    const productOverview = document.querySelector('.product-overview');
 
-            <ul class="product-list">
+                    if (productList) productList.classList.remove('product-list');
+                    if (productOverview) productOverview.classList.remove('product-overview');
+                });
+
+                // Functionality for the 2inline button
+                document.getElementById('2inline').addEventListener('click', function () {
+                    const container = document.querySelector('.product-grid'); // Replace with your container class
+
+                    if (container) {
+                        container.classList.add('product-list');
+                        container.classList.add('product-overview');
+                    }
+                });
+            </script>
+
+            <ul class="product-list product-grid">
 
 
             </ul>
