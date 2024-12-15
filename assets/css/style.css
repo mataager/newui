@@ -1658,6 +1658,10 @@ a.footer-link:is(:hover, :focus) {
   .details-row {
     flex-direction: column !important;
   }
+
+  .inlines-button {
+    display: flex !important;
+  }
 }
 
 #cart-items h5 {
@@ -1800,6 +1804,10 @@ a.footer-link:is(:hover, :focus) {
 
 .p-4 {
   padding: 5px !important;
+}
+
+.pb-20 {
+  padding-bottom: 20px;
 }
 
 .w-h-auto {
@@ -4554,4 +4562,8 @@ th {
 
 .gap-10 {
   gap: 10px;
+}
+
+.inlines-button {
+  display: none;
 }
