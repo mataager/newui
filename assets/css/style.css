@@ -4567,6 +4567,11 @@ th {
 .inlines-button {
   display: none;
 }
+.product-grid {
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
 .grid-button.active {
   background-color: #e0e0e0;
   /* Slightly different background */
