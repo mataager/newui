@@ -2381,6 +2381,8 @@ select {
   width: 100%;
 }
 
+
+
 .cart-dropdown {
   padding: 5px;
   position: relative;
@@ -2642,6 +2644,12 @@ select {
   margin-top: 10px;
   display: flex;
 }
+
+.col-black {
+  color: #000;
+}
+
+
 
 /* Hide the scrollbar */
 .modal-content::-webkit-scrollbar {

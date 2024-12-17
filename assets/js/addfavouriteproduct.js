@@ -28,14 +28,14 @@ async function addfavouriteproduct(key) {
       <form id="productForm">
         <h4>Select Size and Color</h4>
         <label class="fav-modal-label" for="size">Size:</label>
-        <select class="swal2-input" id="size" name="size" required>
+        <select class="swal2-input" col-black id="size" name="size" required>
           ${Object.keys(product.sizes)
             .map((size) => `<option value="${size}">${size}</option>`)
             .join("")}
         </select>
         <br>
         <label class="fav-modal-label" for="color">Color:</label>
-        <select class="swal2-input" id="color" name="color" required></select>
+        <select class="swal2-input col-black" id="color" name="color" required></select>
         <br>
         <div class="flex center width-available">
         <button class="add-to-fav-btn" type="submit">Add to favourite</button>

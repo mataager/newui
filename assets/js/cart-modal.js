@@ -96,14 +96,14 @@ function openCartModal(productId) {
       // Check and set default image source if necessary
       setDefaultImageSource(product);
       modalContent.innerHTML = `
-      <div class="flex flex-end width-available">
+      <div class="flex justify-content-space-between width-available modal-header">
       <div class="flex center flex-end " onclick="productDetails('${productId}')">
-        <button type="button" class="Add-to-Cart" id="perv4Button">
+        <button style="margin: 0px ;border-radius: 8px 0px 8px 0px" type="button" class="Add-to-Cart" id="perv4Button">
             Go to product <i class="bi bi-box-arrow-in-down-right"></i>
         </button>
     </div>
     <div class="flex center flex-end" onclick="closeModal()">
-        <button type="button" class="Add-to-Cart" id="perv4Button">
+        <button style="margin: 0px ;border-radius: 0px 8px 0px 8px" type="button" class="Add-to-Cart" id="perv4Button">
             <i class="bi bi-x-lg"></i>
         </button>
     </div>
