@@ -180,6 +180,7 @@ async function addfavouriteproduct(key) {
     // Show the modal with animation
     modal.style.display = "flex";
     modal.classList.add("show");
+    modalContent.style.animation = "slideUpSmooth 0.6s ease-out forwards";
     document.body.style.overflow = "hidden";
 
     // Handle form submission
