@@ -119,6 +119,7 @@ async function addfavouriteproduct(key) {
     // Fetch product details
     const response = await fetch(url);
     const product = await response.json();
+    console.log(product);
 
     if (!product) {
       alert("Product not found!");
@@ -151,8 +152,9 @@ async function addfavouriteproduct(key) {
         <label class="fav-modal-label" for="color">Color:</label>
         <select class="swal2-input col-black" id="color" name="color" required></select>
       </form>
-      <div class="flex center width-available">
-          <button class="add-to-fav-btn" type="submit">Add to favourite</button>
+      <div class="flex center width-available flex-direction-column">
+      <img width="100px" class="" src="${product["product-photo"]}">
+          <button class="add-to-fav-btn flex align-items" type="submit">Add to favourite <ion-icon  name="heart-outline" role="img" class="md hydrated ml-5" aria-label="heart-outline"></ion-icon></button>
         </div>
     `;
 

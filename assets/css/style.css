@@ -2605,7 +2605,7 @@ select {
   border-radius: 8px;
   text-align: center;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   align-items: center;
   margin: auto;
   overflow: auto;
@@ -2613,6 +2613,7 @@ select {
 }
 
 .add-to-fav-btn {
+  width: fit-content;
   margin: 2px;
   padding: 7px;
   color: rgb(255 255 255);

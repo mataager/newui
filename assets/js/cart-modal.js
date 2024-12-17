@@ -99,7 +99,7 @@ function openCartModal(productId) {
       <div class="flex justify-content-space-between width-available modal-header">
       <div class="flex center flex-end " onclick="productDetails('${productId}')">
         <button style="margin: 0px ;border-radius: 8px 0px 8px 0px" type="button" class="Add-to-Cart" id="perv4Button">
-            Go to product <i class="bi bi-box-arrow-in-down-right"></i>
+        <i class="bi bi-box-arrow-in-down-right"></i>
         </button>
     </div>
     <div class="flex center flex-end" onclick="closeModal()">
