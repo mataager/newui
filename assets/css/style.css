@@ -2620,6 +2620,13 @@ select {
   background: #000;
 }
 
+.fav-image-preview {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .add-to-fav-btn:hover {
   background: #f0f0f0;
   color: black;
