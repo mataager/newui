@@ -25,7 +25,7 @@ async function addfavouriteproduct(key) {
           <i class="bi bi-x-lg"></i>
         </button>
       </div>
-      <form id="productForm">
+      <form class="m-50" id="productForm">
         <h4>Select Size and Color</h4>
         <label class="fav-modal-label" for="size">Size:</label>
         <select class="swal2-input" col-black id="size" name="size" required>
@@ -65,8 +65,9 @@ async function addfavouriteproduct(key) {
     sizeSelect.dispatchEvent(new Event("change"));
 
     // Show the modal
-    modal.style.display = "block";
-    modal.classList.add("show", "flex");
+    modal.style.display = "flex";
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden";
 
     // Handle form submission
     const form = modalContent.querySelector("#productForm");
@@ -88,14 +89,14 @@ async function addfavouriteproduct(key) {
 
       // Hide the modal after submission
       modal.style.display = "none";
-      modal.classList.remove("flex");
+      document.body.style.overflow = "auto"; // Restore body overflow
     };
 
     // Close modal on cancel button click
     const closeModalButton = modalContent.querySelector("#closeModal");
     closeModalButton.onclick = () => {
       modal.style.display = "none";
-      modal.classList.remove("flex");
+      document.body.style.overflow = "auto"; // Restore body overflow
     };
 
     // Close modal when clicking outside the modal content
@@ -103,6 +104,7 @@ async function addfavouriteproduct(key) {
       if (e.target === modal) {
         modal.style.display = "none";
         modal.classList.remove("flex");
+        document.body.style.overflow = "auto"; // Restore body overflow
       }
     });
   } catch (error) {
