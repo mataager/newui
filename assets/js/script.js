@@ -134,6 +134,12 @@ function renderProducts() {
               </button>
               <div class="card-action-tooltip" id="card-label-3">Quick View</div>
             </li>
+            <li class="card-action-item" onclick="addfavouriteproduct('${key}')">
+              <button class="card-action-btn" aria-labelledby="card-label-3">
+                <ion-icon name="heart-outline" role="img" class="md hydrated" aria-label="heart-outline"></ion-icon>
+              </button>
+              <div class="card-action-tooltip" id="card-label-3">Add to Favourite</div>
+            </li>
           </ul>
         </figure>
         <div class="card-content">
