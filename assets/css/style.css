@@ -2599,6 +2599,7 @@ select {
 
 
 .fav-modal-content {
+  position: absolute;
   background: #fff;
   padding: 20px;
   border-radius: 8px;
