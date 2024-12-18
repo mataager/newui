@@ -1768,6 +1768,10 @@ a.footer-link:is(:hover, :focus) {
   margin: 50px;
 }
 
+.m-30 {
+  margin: 30px;
+}
+
 .m-x-20 {
   margin: 0px 20px 0px 20px;
 }
@@ -1952,16 +1956,33 @@ select {
   flex-wrap: wrap !important;
 }
 
-/* preloader
-#preloader {
+
+.preloader-sm {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 9999;
-  background-color: #fff;
-} */
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Slight transparency for overlay effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preloader-sm::after {
+  content: '';
+  width: 50px;
+  height: 50px;
+  border: 6px solid #ccc;
+  /* Light grey border */
+  border-top: 6px solid #000000;
+  /* Blue border for spinner effect */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
 .preloader {
   display: flex;
   justify-content: center;
@@ -2605,7 +2626,7 @@ select {
   border-radius: 8px;
   text-align: center;
   display: flex;
-  /* flex-direction: column; */
+  flex-direction: column;
   align-items: center;
   margin: auto;
   overflow: auto;
@@ -2633,10 +2654,13 @@ select {
 }
 
 .modal-header {
+  display: flex;
   border-radius: 8px 8px 8px 8px;
   right: 0;
   top: 0;
   position: absolute;
+  justify-content: space-between;
+  width: -webkit-fill-available;
 }
 
 .fav-modal-label {
@@ -4578,4 +4602,8 @@ th {
   padding: 5px;
   transition: background 0.3s ease;
   /* Smooth transition */
+}
+
+.radius-5 {
+  border-radius: 5px;
 }
